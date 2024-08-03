@@ -21,6 +21,9 @@
 #include "can.h"
 
 /* USER CODE BEGIN 0 */
+CAN_TxHeaderTypeDef txheader;
+CAN_FilterTypeDef can_filter;
+uint32_t txmailbox;
 
 /* USER CODE END 0 */
 
