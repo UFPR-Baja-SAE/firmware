@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "cstdint": "cpp",
+        "stm32f1xx_hal.h": "c"
+    }
+}
