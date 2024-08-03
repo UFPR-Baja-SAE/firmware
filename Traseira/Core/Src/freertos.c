@@ -45,7 +45,16 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-uint32_t cleber;
+uint8_t* can_msg;
+uint32_t rpm;
+extern uint32_t rpm_itr[4];
+
+extern CAN_HandleTypeDef hcan;
+extern CAN_TxHeaderTypeDef txheader;
+extern uint32_t txmailbox;
+
+
+
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -72,6 +81,11 @@ const osThreadAttr_t RPM_handler_attributes = {
 osMessageQueueId_t CAN_QHandle;
 const osMessageQueueAttr_t CAN_Q_attributes = {
   .name = "CAN_Q"
+};
+/* Definitions for itr_events */
+osEventFlagsId_t itr_eventsHandle;
+const osEventFlagsAttr_t itr_events_attributes = {
+  .name = "itr_events"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -129,6 +143,10 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
+  /* Create the event(s) */
+  /* creation of itr_events */
+  itr_eventsHandle = osEventFlagsNew(&itr_events_attributes);
+
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
@@ -160,12 +178,22 @@ void StartDefaultTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_CAN_handler */
+
+/*
+simlpy handles sending messages from other tasks through the canbus
+task hangs while there aren't any messages in the queue
+*/
+
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
   /* Infinite loop */
   for(;;)
   {
+    osMessageQueueGet(CAN_QHandle, can_msg, NULL, osWaitForever);
+
+    HAL_CAN_AddTxMessage(&hcan, &txheader, can_msg, txmailbox);
+
     osDelay(1);
   }
   /* USER CODE END Start_CAN_handler */
@@ -178,12 +206,32 @@ void Start_CAN_handler(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_RPM_handler */
+
+/*
+probabl should change this task to a general interrupt handler, with the "itr_eventsHandle" 
+containing flags for each interrupt event
+*/
+
 void Start_RPM_handler(void *argument)
 {
   /* USER CODE BEGIN Start_RPM_handler */
   /* Infinite loop */
   for(;;)
   {
+    osEventFlagsWait(itr_eventsHandle, RPM_ITR_FLAG, osFlagsWaitAny, osWaitForever);
+    for (int i = 0; i < 4; i++) {
+      rpm += rpm_itr[i];
+    }
+    rpm;
+
+    rpm = rpm* (6/100);
+
+    rpm_msg qmsg;
+    qmsg.type = MSG_RPM;
+    osMessageQueuePut(CAN_QHandle,  &qmsg, NULL, 0);
+
+    osEventFlagsClear(itr_eventsHandle, RPM_ITR_FLAG);
+    
     osDelay(1);
   }
   /* USER CODE END Start_RPM_handler */

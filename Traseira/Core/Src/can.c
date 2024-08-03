@@ -31,7 +31,20 @@ void MX_CAN_Init(void)
 {
 
   /* USER CODE BEGIN CAN_Init 0 */
+  txheader.StdId = 0x103;
+  txheader.DLC = 8;
+  txheader.IDE = CAN_ID_STD;
+  txheader.RTR = CAN_RTR_DATA;
 
+  can_filter.FilterActivation = CAN_FILTER_ENABLE;
+  can_filter.FilterBank = 1;
+  can_filter.FilterFIFOAssignment = CAN_FilterFIFO0;
+  can_filter.FilterMode = CAN_FILTERMODE_IDMASK;
+  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;
+  can_filter.FilterIdHigh = 0x106 << 5;
+  can_filter.FilterIdLow = 0x0000;
+  can_filter.FilterMaskIdHigh = 0x106 << 5;
+  can_filter.FilterMaskIdLow = 0x0000;
   /* USER CODE END CAN_Init 0 */
 
   /* USER CODE BEGIN CAN_Init 1 */
