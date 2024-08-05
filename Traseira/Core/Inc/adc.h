@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    can.h
+  * @file    adc.h
   * @brief   This file contains all the function prototypes for
-  *          the can.c file
+  *          the adc.c file
   ******************************************************************************
   * @attention
   *
@@ -18,8 +18,8 @@
   */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CAN_H__
-#define __CAN_H__
+#ifndef __ADC_H__
+#define __ADC_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,30 +30,41 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include "msg.h"
+#include "can.h"
 /* USER CODE END Includes */
 
-extern CAN_HandleTypeDef hcan;
+extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN Private defines */
-typedef struct can_msg {
-  MSG_TYPES type;
-  uint8_t size;
-  void* pdata;
-} can_msg;
+
+typedef enum ADC_ARRAY_INDEX {
+  ADC_BAT,
+  ADC_FREIOT,
+  ADC_FREIOD,
+  ADC_COMB
+} ADC_ARRAY_INDEX;
+
+typedef struct ADC_raw_values {
+  uint16_t bat;
+  uint16_t freioT;
+  uint16_t freioD;
+  uint16_t comb;
+} ADC_raw_values;
+
 /* USER CODE END Private defines */
 
-void MX_CAN_Init(void);
+void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size);
+void ADC_read_values(ADC_raw_values* raw);
+void ADC_convert_values(ADC_raw_values* raw, float* conv);
 
-void can_send_message(const can_msg* pmsg);
-
+void ADC_create_msg(float* conv, can_msg* part1, can_msg* part2);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __CAN_H__ */
+#endif /* __ADC_H__ */
 
