@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
+#include "error.h"
+#include "can.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,8 +47,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-uint8_t* can_msg;
-uint32_t rpm;
+can_msg msg;
+
+
+
 extern uint32_t rpm_itr[4];
 
 extern CAN_HandleTypeDef hcan;
@@ -178,23 +182,29 @@ void StartDefaultTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_CAN_handler */
-
-/*
-simlpy handles sending messages from other tasks through the canbus
-task hangs while there aren't any messages in the queue
-*/
-
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
   /* Infinite loop */
   for(;;)
   {
-    osMessageQueueGet(CAN_QHandle, can_msg, NULL, osWaitForever);
+    if (osMessageQueueGetCount(CAN_QHandle) >= osMessageQueueGetCapacity(CAN_QHandle)) {
+      osMessageQueueReset(CAN_QHandle);
+      HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*) ERROR_CAN_QUEUE_FULL, &txmailbox);
+    }
 
-    HAL_CAN_AddTxMessage(&hcan, &txheader, can_msg, txmailbox);
+    if (osMessageQueueGet(CAN_QHandle, &msg, NULL, osWaitForever) == osOK) {
+      
+      
+      HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*)msg.pdata, &txmailbox);
+      free(msg.pdata);
+    }
+
+    
 
     osDelay(1);
+
+    
   }
   /* USER CODE END Start_CAN_handler */
 }
@@ -206,31 +216,23 @@ void Start_CAN_handler(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_RPM_handler */
-
-/*
-probabl should change this task to a general interrupt handler, with the "itr_eventsHandle" 
-containing flags for each interrupt event
-*/
-
 void Start_RPM_handler(void *argument)
 {
   /* USER CODE BEGIN Start_RPM_handler */
   /* Infinite loop */
   for(;;)
   {
-    osEventFlagsWait(itr_eventsHandle, RPM_ITR_FLAG, osFlagsWaitAny, osWaitForever);
-    for (int i = 0; i < 4; i++) {
-      rpm += rpm_itr[i];
-    }
-    rpm;
+    osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
+    can_msg rpm_msg;
+    rpm_msg.pdata = malloc(sizeof(float));
+    rpm_msg.type = MSG_RPM;
 
-    rpm = rpm* (6/100);
+    float rpm = rpm_calculate(rpm_itr);
+    rpm_msg.pdata = &rpm;
 
-    rpm_msg qmsg;
-    qmsg.type = MSG_RPM;
-    osMessageQueuePut(CAN_QHandle,  &qmsg, NULL, 0);
+    osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
 
-    osEventFlagsClear(itr_eventsHandle, RPM_ITR_FLAG);
+    osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
     
     osDelay(1);
   }

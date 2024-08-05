@@ -1,8 +1,9 @@
 #include "msg_types.h"
 #include "stdint.h"
-#define RPM_ITR_FLAG 0x0000001
+#include "event_flags.h"
 
-typedef struct rpm_msg {
-    MSG_TYPE type;
-    uint32_t rpm;
-} rpm_msg;
+#define RPM_SAMPLES 5
+
+float rpm_calculate(uint32_t* pdata);
+
+//add variation calculations and other stats n stuff

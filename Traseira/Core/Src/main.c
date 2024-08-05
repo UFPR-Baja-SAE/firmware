@@ -34,7 +34,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-extern itr_eventsHandle;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,6 +46,9 @@ extern itr_eventsHandle;
 /* USER CODE BEGIN PV */
 uint32_t rpm_itr[4];
 uint8_t rpm_counter;
+uint32_t rpm_last_itr;
+uint32_t rpm_curr_itr;
+extern osEventFlagsId_t itr_eventsHandle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,8 +59,13 @@ void MX_FREERTOS_Init(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
     case GPIO_PIN_7:
-      rpm_itr[rpm_counter % 4] = HAL_GetTick();
-      osEventFlagsSet(itr_eventsHandle, RPM_ITR_FLAG);
+      rpm_curr_itr = osKernelGetTickCount();
+      rpm_itr[rpm_counter % RPM_SAMPLES] = rpm_curr_itr - rpm_last_itr;
+      rpm_last_itr = rpm_curr_itr;
+
+      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+      //make it so this doesn't clog the can queue;
+      if ((rpm_counter % RPM_SAMPLES) == 0) osEventFlagsSet(itr_eventsHandle, ITR_RPM_FLAG); 
       rpm_counter++;
       break;
   }
@@ -78,7 +85,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

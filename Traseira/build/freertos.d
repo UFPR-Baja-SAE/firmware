@@ -33,7 +33,8 @@ build/freertos.o: Core/Src/freertos.c \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- Core/Inc/rpm.h Core/Inc/msg_types.h
+ Core/Inc/rpm.h Core/Inc/msg_types.h ../baja_utils/inc/event_flags.h \
+ Core/Inc/error.h Core/Inc/can.h Core/Inc/main.h ../baja_utils/inc/msg.h
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -73,3 +74,8 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 Core/Inc/rpm.h:
 Core/Inc/msg_types.h:
+../baja_utils/inc/event_flags.h:
+Core/Inc/error.h:
+Core/Inc/can.h:
+Core/Inc/main.h:
+../baja_utils/inc/msg.h:

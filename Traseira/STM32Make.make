@@ -40,6 +40,7 @@ Core/Src/can.c \
 Core/Src/freertos.c \
 Core/Src/gpio.c \
 Core/Src/main.c \
+Core/Src/rpm.c \
 Core/Src/stm32f1xx_hal_msp.c \
 Core/Src/stm32f1xx_hal_timebase_tim.c \
 Core/Src/stm32f1xx_it.c \
@@ -141,6 +142,7 @@ AS_INCLUDES = \
 
 # C includes
 C_INCLUDES =  \
+-I../baja_utils/inc \
 -ICore/Inc \
 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
 -IDrivers/CMSIS/Include \

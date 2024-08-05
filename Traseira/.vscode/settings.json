@@ -5,7 +5,8 @@
         "stm32f1xx_hal_rcc_ex.h": "c",
         "main.h": "c",
         "stm32f1xx_hal.h": "c",
-        "stm32f1xx_hal_conf.h": "c"
+        "stm32f1xx_hal_conf.h": "c",
+        "event_flags.h": "c"
     },
     "cortex-debug.armToolchainPath": "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin",
     "cortex-debug.openocdPath": "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/openocd/0.12.0-4.1/.content/bin/openocd"

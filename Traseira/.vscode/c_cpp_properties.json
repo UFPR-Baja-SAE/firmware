@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Core/Inc",
+                "/home/lorolol/Baja/firmware/baja_utils/inc"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
@@ -15,6 +17,7 @@
         {
             "name": "STM32",
             "includePath": [
+                "../baja_utils/inc",
                 "Core/Inc",
                 "Drivers/CMSIS/Device/ST/STM32F1xx/Include",
                 "Drivers/CMSIS/Include",

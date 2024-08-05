@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccRieNZW.s 			page 1
+ARM GAS  /tmp/cc0LYPNc.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -54,176 +54,180 @@ ARM GAS  /tmp/ccRieNZW.s 			page 1
   26:Core/Src/freertos.c **** /* Private includes ----------------------------------------------------------*/
   27:Core/Src/freertos.c **** /* USER CODE BEGIN Includes */
   28:Core/Src/freertos.c **** #include "rpm.h"
-  29:Core/Src/freertos.c **** /* USER CODE END Includes */
-  30:Core/Src/freertos.c **** 
-  31:Core/Src/freertos.c **** /* Private typedef -----------------------------------------------------------*/
-  32:Core/Src/freertos.c **** /* USER CODE BEGIN PTD */
-ARM GAS  /tmp/ccRieNZW.s 			page 2
+  29:Core/Src/freertos.c **** #include "error.h"
+  30:Core/Src/freertos.c **** #include "can.h"
+  31:Core/Src/freertos.c **** /* USER CODE END Includes */
+  32:Core/Src/freertos.c **** 
+ARM GAS  /tmp/cc0LYPNc.s 			page 2
 
 
-  33:Core/Src/freertos.c **** 
-  34:Core/Src/freertos.c **** /* USER CODE END PTD */
+  33:Core/Src/freertos.c **** /* Private typedef -----------------------------------------------------------*/
+  34:Core/Src/freertos.c **** /* USER CODE BEGIN PTD */
   35:Core/Src/freertos.c **** 
-  36:Core/Src/freertos.c **** /* Private define ------------------------------------------------------------*/
-  37:Core/Src/freertos.c **** /* USER CODE BEGIN PD */
-  38:Core/Src/freertos.c **** 
-  39:Core/Src/freertos.c **** /* USER CODE END PD */
+  36:Core/Src/freertos.c **** /* USER CODE END PTD */
+  37:Core/Src/freertos.c **** 
+  38:Core/Src/freertos.c **** /* Private define ------------------------------------------------------------*/
+  39:Core/Src/freertos.c **** /* USER CODE BEGIN PD */
   40:Core/Src/freertos.c **** 
-  41:Core/Src/freertos.c **** /* Private macro -------------------------------------------------------------*/
-  42:Core/Src/freertos.c **** /* USER CODE BEGIN PM */
-  43:Core/Src/freertos.c **** 
-  44:Core/Src/freertos.c **** /* USER CODE END PM */
+  41:Core/Src/freertos.c **** /* USER CODE END PD */
+  42:Core/Src/freertos.c **** 
+  43:Core/Src/freertos.c **** /* Private macro -------------------------------------------------------------*/
+  44:Core/Src/freertos.c **** /* USER CODE BEGIN PM */
   45:Core/Src/freertos.c **** 
-  46:Core/Src/freertos.c **** /* Private variables ---------------------------------------------------------*/
-  47:Core/Src/freertos.c **** /* USER CODE BEGIN Variables */
-  48:Core/Src/freertos.c **** uint8_t* can_msg;
-  49:Core/Src/freertos.c **** uint32_t rpm;
-  50:Core/Src/freertos.c **** extern uint32_t rpm_itr[4];
+  46:Core/Src/freertos.c **** /* USER CODE END PM */
+  47:Core/Src/freertos.c **** 
+  48:Core/Src/freertos.c **** /* Private variables ---------------------------------------------------------*/
+  49:Core/Src/freertos.c **** /* USER CODE BEGIN Variables */
+  50:Core/Src/freertos.c **** can_msg msg;
   51:Core/Src/freertos.c **** 
-  52:Core/Src/freertos.c **** extern CAN_HandleTypeDef hcan;
-  53:Core/Src/freertos.c **** extern CAN_TxHeaderTypeDef txheader;
-  54:Core/Src/freertos.c **** extern uint32_t txmailbox;
+  52:Core/Src/freertos.c **** 
+  53:Core/Src/freertos.c **** 
+  54:Core/Src/freertos.c **** extern uint32_t rpm_itr[4];
   55:Core/Src/freertos.c **** 
-  56:Core/Src/freertos.c **** 
-  57:Core/Src/freertos.c **** 
-  58:Core/Src/freertos.c **** /* USER CODE END Variables */
-  59:Core/Src/freertos.c **** /* Definitions for defaultTask */
-  60:Core/Src/freertos.c **** osThreadId_t defaultTaskHandle;
-  61:Core/Src/freertos.c **** const osThreadAttr_t defaultTask_attributes = {
-  62:Core/Src/freertos.c ****   .name = "defaultTask",
-  63:Core/Src/freertos.c ****   .stack_size = 128 * 4,
-  64:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
-  65:Core/Src/freertos.c **** };
-  66:Core/Src/freertos.c **** /* Definitions for CAN_handler */
-  67:Core/Src/freertos.c **** osThreadId_t CAN_handlerHandle;
-  68:Core/Src/freertos.c **** const osThreadAttr_t CAN_handler_attributes = {
-  69:Core/Src/freertos.c ****   .name = "CAN_handler",
-  70:Core/Src/freertos.c ****   .stack_size = 128 * 4,
-  71:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
-  72:Core/Src/freertos.c **** };
-  73:Core/Src/freertos.c **** /* Definitions for RPM_handler */
-  74:Core/Src/freertos.c **** osThreadId_t RPM_handlerHandle;
-  75:Core/Src/freertos.c **** const osThreadAttr_t RPM_handler_attributes = {
-  76:Core/Src/freertos.c ****   .name = "RPM_handler",
-  77:Core/Src/freertos.c ****   .stack_size = 128 * 4,
-  78:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityRealtime,
-  79:Core/Src/freertos.c **** };
-  80:Core/Src/freertos.c **** /* Definitions for CAN_Q */
-  81:Core/Src/freertos.c **** osMessageQueueId_t CAN_QHandle;
-  82:Core/Src/freertos.c **** const osMessageQueueAttr_t CAN_Q_attributes = {
-  83:Core/Src/freertos.c ****   .name = "CAN_Q"
-  84:Core/Src/freertos.c **** };
-  85:Core/Src/freertos.c **** /* Definitions for itr_events */
-  86:Core/Src/freertos.c **** osEventFlagsId_t itr_eventsHandle;
-  87:Core/Src/freertos.c **** const osEventFlagsAttr_t itr_events_attributes = {
-  88:Core/Src/freertos.c ****   .name = "itr_events"
-  89:Core/Src/freertos.c **** };
-ARM GAS  /tmp/ccRieNZW.s 			page 3
+  56:Core/Src/freertos.c **** extern CAN_HandleTypeDef hcan;
+  57:Core/Src/freertos.c **** extern CAN_TxHeaderTypeDef txheader;
+  58:Core/Src/freertos.c **** extern uint32_t txmailbox;
+  59:Core/Src/freertos.c **** 
+  60:Core/Src/freertos.c **** 
+  61:Core/Src/freertos.c **** 
+  62:Core/Src/freertos.c **** /* USER CODE END Variables */
+  63:Core/Src/freertos.c **** /* Definitions for defaultTask */
+  64:Core/Src/freertos.c **** osThreadId_t defaultTaskHandle;
+  65:Core/Src/freertos.c **** const osThreadAttr_t defaultTask_attributes = {
+  66:Core/Src/freertos.c ****   .name = "defaultTask",
+  67:Core/Src/freertos.c ****   .stack_size = 128 * 4,
+  68:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
+  69:Core/Src/freertos.c **** };
+  70:Core/Src/freertos.c **** /* Definitions for CAN_handler */
+  71:Core/Src/freertos.c **** osThreadId_t CAN_handlerHandle;
+  72:Core/Src/freertos.c **** const osThreadAttr_t CAN_handler_attributes = {
+  73:Core/Src/freertos.c ****   .name = "CAN_handler",
+  74:Core/Src/freertos.c ****   .stack_size = 128 * 4,
+  75:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
+  76:Core/Src/freertos.c **** };
+  77:Core/Src/freertos.c **** /* Definitions for RPM_handler */
+  78:Core/Src/freertos.c **** osThreadId_t RPM_handlerHandle;
+  79:Core/Src/freertos.c **** const osThreadAttr_t RPM_handler_attributes = {
+  80:Core/Src/freertos.c ****   .name = "RPM_handler",
+  81:Core/Src/freertos.c ****   .stack_size = 128 * 4,
+  82:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityRealtime,
+  83:Core/Src/freertos.c **** };
+  84:Core/Src/freertos.c **** /* Definitions for CAN_Q */
+  85:Core/Src/freertos.c **** osMessageQueueId_t CAN_QHandle;
+  86:Core/Src/freertos.c **** const osMessageQueueAttr_t CAN_Q_attributes = {
+  87:Core/Src/freertos.c ****   .name = "CAN_Q"
+  88:Core/Src/freertos.c **** };
+  89:Core/Src/freertos.c **** /* Definitions for itr_events */
+ARM GAS  /tmp/cc0LYPNc.s 			page 3
 
 
-  90:Core/Src/freertos.c **** 
-  91:Core/Src/freertos.c **** /* Private function prototypes -----------------------------------------------*/
-  92:Core/Src/freertos.c **** /* USER CODE BEGIN FunctionPrototypes */
-  93:Core/Src/freertos.c **** 
-  94:Core/Src/freertos.c **** /* USER CODE END FunctionPrototypes */
-  95:Core/Src/freertos.c **** 
-  96:Core/Src/freertos.c **** void StartDefaultTask(void *argument);
-  97:Core/Src/freertos.c **** void Start_CAN_handler(void *argument);
-  98:Core/Src/freertos.c **** void Start_RPM_handler(void *argument);
+  90:Core/Src/freertos.c **** osEventFlagsId_t itr_eventsHandle;
+  91:Core/Src/freertos.c **** const osEventFlagsAttr_t itr_events_attributes = {
+  92:Core/Src/freertos.c ****   .name = "itr_events"
+  93:Core/Src/freertos.c **** };
+  94:Core/Src/freertos.c **** 
+  95:Core/Src/freertos.c **** /* Private function prototypes -----------------------------------------------*/
+  96:Core/Src/freertos.c **** /* USER CODE BEGIN FunctionPrototypes */
+  97:Core/Src/freertos.c **** 
+  98:Core/Src/freertos.c **** /* USER CODE END FunctionPrototypes */
   99:Core/Src/freertos.c **** 
- 100:Core/Src/freertos.c **** void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
- 101:Core/Src/freertos.c **** 
- 102:Core/Src/freertos.c **** /**
- 103:Core/Src/freertos.c ****   * @brief  FreeRTOS initialization
- 104:Core/Src/freertos.c ****   * @param  None
- 105:Core/Src/freertos.c ****   * @retval None
- 106:Core/Src/freertos.c ****   */
- 107:Core/Src/freertos.c **** void MX_FREERTOS_Init(void) {
- 108:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
- 109:Core/Src/freertos.c **** 
- 110:Core/Src/freertos.c ****   /* USER CODE END Init */
- 111:Core/Src/freertos.c **** 
- 112:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_MUTEX */
- 113:Core/Src/freertos.c ****   /* add mutexes, ... */
- 114:Core/Src/freertos.c ****   /* USER CODE END RTOS_MUTEX */
+ 100:Core/Src/freertos.c **** void StartDefaultTask(void *argument);
+ 101:Core/Src/freertos.c **** void Start_CAN_handler(void *argument);
+ 102:Core/Src/freertos.c **** void Start_RPM_handler(void *argument);
+ 103:Core/Src/freertos.c **** 
+ 104:Core/Src/freertos.c **** void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+ 105:Core/Src/freertos.c **** 
+ 106:Core/Src/freertos.c **** /**
+ 107:Core/Src/freertos.c ****   * @brief  FreeRTOS initialization
+ 108:Core/Src/freertos.c ****   * @param  None
+ 109:Core/Src/freertos.c ****   * @retval None
+ 110:Core/Src/freertos.c ****   */
+ 111:Core/Src/freertos.c **** void MX_FREERTOS_Init(void) {
+ 112:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
+ 113:Core/Src/freertos.c **** 
+ 114:Core/Src/freertos.c ****   /* USER CODE END Init */
  115:Core/Src/freertos.c **** 
- 116:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_SEMAPHORES */
- 117:Core/Src/freertos.c ****   /* add semaphores, ... */
- 118:Core/Src/freertos.c ****   /* USER CODE END RTOS_SEMAPHORES */
+ 116:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_MUTEX */
+ 117:Core/Src/freertos.c ****   /* add mutexes, ... */
+ 118:Core/Src/freertos.c ****   /* USER CODE END RTOS_MUTEX */
  119:Core/Src/freertos.c **** 
- 120:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_TIMERS */
- 121:Core/Src/freertos.c ****   /* start timers, add new ones, ... */
- 122:Core/Src/freertos.c ****   /* USER CODE END RTOS_TIMERS */
+ 120:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_SEMAPHORES */
+ 121:Core/Src/freertos.c ****   /* add semaphores, ... */
+ 122:Core/Src/freertos.c ****   /* USER CODE END RTOS_SEMAPHORES */
  123:Core/Src/freertos.c **** 
- 124:Core/Src/freertos.c ****   /* Create the queue(s) */
- 125:Core/Src/freertos.c ****   /* creation of CAN_Q */
- 126:Core/Src/freertos.c ****   CAN_QHandle = osMessageQueueNew (16, sizeof(uint16_t), &CAN_Q_attributes);
+ 124:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_TIMERS */
+ 125:Core/Src/freertos.c ****   /* start timers, add new ones, ... */
+ 126:Core/Src/freertos.c ****   /* USER CODE END RTOS_TIMERS */
  127:Core/Src/freertos.c **** 
- 128:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_QUEUES */
- 129:Core/Src/freertos.c ****   /* add queues, ... */
- 130:Core/Src/freertos.c ****   /* USER CODE END RTOS_QUEUES */
+ 128:Core/Src/freertos.c ****   /* Create the queue(s) */
+ 129:Core/Src/freertos.c ****   /* creation of CAN_Q */
+ 130:Core/Src/freertos.c ****   CAN_QHandle = osMessageQueueNew (16, sizeof(uint16_t), &CAN_Q_attributes);
  131:Core/Src/freertos.c **** 
- 132:Core/Src/freertos.c ****   /* Create the thread(s) */
- 133:Core/Src/freertos.c ****   /* creation of defaultTask */
- 134:Core/Src/freertos.c ****   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+ 132:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_QUEUES */
+ 133:Core/Src/freertos.c ****   /* add queues, ... */
+ 134:Core/Src/freertos.c ****   /* USER CODE END RTOS_QUEUES */
  135:Core/Src/freertos.c **** 
- 136:Core/Src/freertos.c ****   /* creation of CAN_handler */
- 137:Core/Src/freertos.c ****   CAN_handlerHandle = osThreadNew(Start_CAN_handler, NULL, &CAN_handler_attributes);
- 138:Core/Src/freertos.c **** 
- 139:Core/Src/freertos.c ****   /* creation of RPM_handler */
- 140:Core/Src/freertos.c ****   RPM_handlerHandle = osThreadNew(Start_RPM_handler, NULL, &RPM_handler_attributes);
- 141:Core/Src/freertos.c **** 
- 142:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_THREADS */
- 143:Core/Src/freertos.c ****   /* add threads, ... */
- 144:Core/Src/freertos.c ****   /* USER CODE END RTOS_THREADS */
+ 136:Core/Src/freertos.c ****   /* Create the thread(s) */
+ 137:Core/Src/freertos.c ****   /* creation of defaultTask */
+ 138:Core/Src/freertos.c ****   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+ 139:Core/Src/freertos.c **** 
+ 140:Core/Src/freertos.c ****   /* creation of CAN_handler */
+ 141:Core/Src/freertos.c ****   CAN_handlerHandle = osThreadNew(Start_CAN_handler, NULL, &CAN_handler_attributes);
+ 142:Core/Src/freertos.c **** 
+ 143:Core/Src/freertos.c ****   /* creation of RPM_handler */
+ 144:Core/Src/freertos.c ****   RPM_handlerHandle = osThreadNew(Start_RPM_handler, NULL, &RPM_handler_attributes);
  145:Core/Src/freertos.c **** 
- 146:Core/Src/freertos.c ****   /* Create the event(s) */
-ARM GAS  /tmp/ccRieNZW.s 			page 4
+ 146:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_THREADS */
+ARM GAS  /tmp/cc0LYPNc.s 			page 4
 
 
- 147:Core/Src/freertos.c ****   /* creation of itr_events */
- 148:Core/Src/freertos.c ****   itr_eventsHandle = osEventFlagsNew(&itr_events_attributes);
+ 147:Core/Src/freertos.c ****   /* add threads, ... */
+ 148:Core/Src/freertos.c ****   /* USER CODE END RTOS_THREADS */
  149:Core/Src/freertos.c **** 
- 150:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_EVENTS */
- 151:Core/Src/freertos.c ****   /* add events, ... */
- 152:Core/Src/freertos.c ****   /* USER CODE END RTOS_EVENTS */
+ 150:Core/Src/freertos.c ****   /* Create the event(s) */
+ 151:Core/Src/freertos.c ****   /* creation of itr_events */
+ 152:Core/Src/freertos.c ****   itr_eventsHandle = osEventFlagsNew(&itr_events_attributes);
  153:Core/Src/freertos.c **** 
- 154:Core/Src/freertos.c **** }
- 155:Core/Src/freertos.c **** 
- 156:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartDefaultTask */
- 157:Core/Src/freertos.c **** /**
- 158:Core/Src/freertos.c ****   * @brief  Function implementing the defaultTask thread.
- 159:Core/Src/freertos.c ****   * @param  argument: Not used
- 160:Core/Src/freertos.c ****   * @retval None
- 161:Core/Src/freertos.c ****   */
- 162:Core/Src/freertos.c **** /* USER CODE END Header_StartDefaultTask */
- 163:Core/Src/freertos.c **** void StartDefaultTask(void *argument)
- 164:Core/Src/freertos.c **** {
-  27              		.loc 1 164 1 view -0
+ 154:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_EVENTS */
+ 155:Core/Src/freertos.c ****   /* add events, ... */
+ 156:Core/Src/freertos.c ****   /* USER CODE END RTOS_EVENTS */
+ 157:Core/Src/freertos.c **** 
+ 158:Core/Src/freertos.c **** }
+ 159:Core/Src/freertos.c **** 
+ 160:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartDefaultTask */
+ 161:Core/Src/freertos.c **** /**
+ 162:Core/Src/freertos.c ****   * @brief  Function implementing the defaultTask thread.
+ 163:Core/Src/freertos.c ****   * @param  argument: Not used
+ 164:Core/Src/freertos.c ****   * @retval None
+ 165:Core/Src/freertos.c ****   */
+ 166:Core/Src/freertos.c **** /* USER CODE END Header_StartDefaultTask */
+ 167:Core/Src/freertos.c **** void StartDefaultTask(void *argument)
+ 168:Core/Src/freertos.c **** {
+  27              		.loc 1 168 1 view -0
   28              		.cfi_startproc
   29              		@ Volatile: function does not return.
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 0, uses_anonymous_args = 0
   32              	.LVL0:
-  33              		.loc 1 164 1 is_stmt 0 view .LVU1
+  33              		.loc 1 168 1 is_stmt 0 view .LVU1
   34 0000 08B5     		push	{r3, lr}
   35              		.cfi_def_cfa_offset 8
   36              		.cfi_offset 3, -8
   37              		.cfi_offset 14, -4
   38              	.LVL1:
   39              	.L2:
- 165:Core/Src/freertos.c ****   /* USER CODE BEGIN StartDefaultTask */
- 166:Core/Src/freertos.c ****   /* Infinite loop */
- 167:Core/Src/freertos.c ****   for(;;)
-  40              		.loc 1 167 3 is_stmt 1 view .LVU2
- 168:Core/Src/freertos.c ****   {
- 169:Core/Src/freertos.c ****     osDelay(1);
-  41              		.loc 1 169 5 discriminator 1 view .LVU3
+ 169:Core/Src/freertos.c ****   /* USER CODE BEGIN StartDefaultTask */
+ 170:Core/Src/freertos.c ****   /* Infinite loop */
+ 171:Core/Src/freertos.c ****   for(;;)
+  40              		.loc 1 171 3 is_stmt 1 view .LVU2
+ 172:Core/Src/freertos.c ****   {
+ 173:Core/Src/freertos.c ****     osDelay(1);
+  41              		.loc 1 173 5 discriminator 1 view .LVU3
   42 0002 0120     		movs	r0, #1
   43 0004 FFF7FEFF 		bl	osDelay
   44              	.LVL2:
- 167:Core/Src/freertos.c ****   {
-  45              		.loc 1 167 3 view .LVU4
+ 171:Core/Src/freertos.c ****   {
+  45              		.loc 1 171 3 view .LVU4
   46 0008 FBE7     		b	.L2
   47              		.cfi_endproc
   48              	.LFE70:
@@ -234,541 +238,572 @@ ARM GAS  /tmp/ccRieNZW.s 			page 1
   54              		.thumb
   55              		.thumb_func
   57              	Start_CAN_handler:
+ARM GAS  /tmp/cc0LYPNc.s 			page 5
+
+
   58              	.LFB71:
- 170:Core/Src/freertos.c ****   }
- 171:Core/Src/freertos.c ****   /* USER CODE END StartDefaultTask */
- 172:Core/Src/freertos.c **** }
-ARM GAS  /tmp/ccRieNZW.s 			page 5
-
-
- 173:Core/Src/freertos.c **** 
- 174:Core/Src/freertos.c **** /* USER CODE BEGIN Header_Start_CAN_handler */
- 175:Core/Src/freertos.c **** /**
- 176:Core/Src/freertos.c **** * @brief Function implementing the CAN_handler thread.
- 177:Core/Src/freertos.c **** * @param argument: Not used
- 178:Core/Src/freertos.c **** * @retval None
- 179:Core/Src/freertos.c **** */
- 180:Core/Src/freertos.c **** /* USER CODE END Header_Start_CAN_handler */
- 181:Core/Src/freertos.c **** 
- 182:Core/Src/freertos.c **** /*
- 183:Core/Src/freertos.c **** simlpy handles sending messages from other tasks through the canbus
- 184:Core/Src/freertos.c **** task hangs while there aren't any messages in the queue
- 185:Core/Src/freertos.c **** */
- 186:Core/Src/freertos.c **** 
- 187:Core/Src/freertos.c **** void Start_CAN_handler(void *argument)
- 188:Core/Src/freertos.c **** {
-  59              		.loc 1 188 1 view -0
+ 174:Core/Src/freertos.c ****   }
+ 175:Core/Src/freertos.c ****   /* USER CODE END StartDefaultTask */
+ 176:Core/Src/freertos.c **** }
+ 177:Core/Src/freertos.c **** 
+ 178:Core/Src/freertos.c **** /* USER CODE BEGIN Header_Start_CAN_handler */
+ 179:Core/Src/freertos.c **** /**
+ 180:Core/Src/freertos.c **** * @brief Function implementing the CAN_handler thread.
+ 181:Core/Src/freertos.c **** * @param argument: Not used
+ 182:Core/Src/freertos.c **** * @retval None
+ 183:Core/Src/freertos.c **** */
+ 184:Core/Src/freertos.c **** /* USER CODE END Header_Start_CAN_handler */
+ 185:Core/Src/freertos.c **** void Start_CAN_handler(void *argument)
+ 186:Core/Src/freertos.c **** {
+  59              		.loc 1 186 1 view -0
   60              		.cfi_startproc
   61              		@ Volatile: function does not return.
   62              		@ args = 0, pretend = 0, frame = 0
   63              		@ frame_needed = 0, uses_anonymous_args = 0
   64              	.LVL3:
-  65              		.loc 1 188 1 is_stmt 0 view .LVU6
+  65              		.loc 1 186 1 is_stmt 0 view .LVU6
   66 0000 08B5     		push	{r3, lr}
   67              		.cfi_def_cfa_offset 8
   68              		.cfi_offset 3, -8
   69              		.cfi_offset 14, -4
-  70              	.LVL4:
-  71              	.L5:
- 189:Core/Src/freertos.c ****   /* USER CODE BEGIN Start_CAN_handler */
- 190:Core/Src/freertos.c ****   /* Infinite loop */
- 191:Core/Src/freertos.c ****   for(;;)
-  72              		.loc 1 191 3 is_stmt 1 view .LVU7
- 192:Core/Src/freertos.c ****   {
- 193:Core/Src/freertos.c ****     osMessageQueueGet(CAN_QHandle, can_msg, NULL, osWaitForever);
-  73              		.loc 1 193 5 view .LVU8
-  74 0002 0A4C     		ldr	r4, .L7
-  75 0004 4FF0FF33 		mov	r3, #-1
-  76 0008 0022     		movs	r2, #0
-  77 000a 2168     		ldr	r1, [r4]
-  78 000c 0848     		ldr	r0, .L7+4
-  79 000e 0068     		ldr	r0, [r0]
-  80 0010 FFF7FEFF 		bl	osMessageQueueGet
-  81              	.LVL5:
- 194:Core/Src/freertos.c **** 
- 195:Core/Src/freertos.c ****     HAL_CAN_AddTxMessage(&hcan, &txheader, can_msg, txmailbox);
-  82              		.loc 1 195 5 view .LVU9
-  83 0014 074B     		ldr	r3, .L7+8
-  84 0016 1B68     		ldr	r3, [r3]
-  85 0018 2268     		ldr	r2, [r4]
-  86 001a 0749     		ldr	r1, .L7+12
-  87 001c 0748     		ldr	r0, .L7+16
-  88 001e FFF7FEFF 		bl	HAL_CAN_AddTxMessage
-  89              	.LVL6:
- 196:Core/Src/freertos.c **** 
- 197:Core/Src/freertos.c ****     osDelay(1);
-  90              		.loc 1 197 5 discriminator 1 view .LVU10
-ARM GAS  /tmp/ccRieNZW.s 			page 6
+  70 0002 16E0     		b	.L7
+  71              	.LVL4:
+  72              	.L9:
+ 187:Core/Src/freertos.c ****   /* USER CODE BEGIN Start_CAN_handler */
+ 188:Core/Src/freertos.c ****   /* Infinite loop */
+ 189:Core/Src/freertos.c ****   for(;;)
+ 190:Core/Src/freertos.c ****   {
+ 191:Core/Src/freertos.c ****     if (osMessageQueueGetCount(CAN_QHandle) >= osMessageQueueGetCapacity(CAN_QHandle)) {
+ 192:Core/Src/freertos.c ****       osMessageQueueReset(CAN_QHandle);
+  73              		.loc 1 192 7 is_stmt 1 view .LVU7
+  74 0004 2868     		ldr	r0, [r5]
+  75 0006 FFF7FEFF 		bl	osMessageQueueReset
+  76              	.LVL5:
+ 193:Core/Src/freertos.c ****       HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*) ERROR_CAN_QUEUE_FULL, &txmailbox);
+  77              		.loc 1 193 7 view .LVU8
+  78 000a 144B     		ldr	r3, .L11
+  79 000c 6522     		movs	r2, #101
+  80 000e 1449     		ldr	r1, .L11+4
+  81 0010 1448     		ldr	r0, .L11+8
+  82 0012 FFF7FEFF 		bl	HAL_CAN_AddTxMessage
+  83              	.LVL6:
+  84 0016 16E0     		b	.L5
+  85              	.L10:
+  86              	.LBB2:
+ 194:Core/Src/freertos.c ****     }
+ 195:Core/Src/freertos.c **** 
+ 196:Core/Src/freertos.c ****     if (osMessageQueueGet(CAN_QHandle, &msg, NULL, osWaitForever) == osOK) {
+ 197:Core/Src/freertos.c ****       
+ 198:Core/Src/freertos.c ****       
+ 199:Core/Src/freertos.c ****       HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*)msg.pdata, &txmailbox);
+  87              		.loc 1 199 7 view .LVU9
+  88              		.loc 1 199 59 is_stmt 0 view .LVU10
+ARM GAS  /tmp/cc0LYPNc.s 			page 6
 
 
-  91 0022 0120     		movs	r0, #1
-  92 0024 FFF7FEFF 		bl	osDelay
-  93              	.LVL7:
- 191:Core/Src/freertos.c ****   {
-  94              		.loc 1 191 3 view .LVU11
-  95 0028 EBE7     		b	.L5
-  96              	.L8:
-  97 002a 00BF     		.align	2
-  98              	.L7:
-  99 002c 00000000 		.word	can_msg
- 100 0030 00000000 		.word	CAN_QHandle
- 101 0034 00000000 		.word	txmailbox
- 102 0038 00000000 		.word	txheader
- 103 003c 00000000 		.word	hcan
- 104              		.cfi_endproc
- 105              	.LFE71:
- 107              		.section	.text.Start_RPM_handler,"ax",%progbits
- 108              		.align	1
- 109              		.global	Start_RPM_handler
- 110              		.syntax unified
- 111              		.thumb
- 112              		.thumb_func
- 114              	Start_RPM_handler:
- 115              	.LFB72:
- 198:Core/Src/freertos.c ****   }
- 199:Core/Src/freertos.c ****   /* USER CODE END Start_CAN_handler */
- 200:Core/Src/freertos.c **** }
- 201:Core/Src/freertos.c **** 
- 202:Core/Src/freertos.c **** /* USER CODE BEGIN Header_Start_RPM_handler */
- 203:Core/Src/freertos.c **** /**
- 204:Core/Src/freertos.c **** * @brief Function implementing the RPM_handler thread.
- 205:Core/Src/freertos.c **** * @param argument: Not used
- 206:Core/Src/freertos.c **** * @retval None
- 207:Core/Src/freertos.c **** */
- 208:Core/Src/freertos.c **** /* USER CODE END Header_Start_RPM_handler */
- 209:Core/Src/freertos.c **** 
- 210:Core/Src/freertos.c **** /*
- 211:Core/Src/freertos.c **** probabl should change this task to a general interrupt handler, with the "itr_eventsHandle" 
- 212:Core/Src/freertos.c **** containing flags for each interrupt event
- 213:Core/Src/freertos.c **** */
- 214:Core/Src/freertos.c **** 
- 215:Core/Src/freertos.c **** void Start_RPM_handler(void *argument)
- 216:Core/Src/freertos.c **** {
- 116              		.loc 1 216 1 view -0
- 117              		.cfi_startproc
- 118              		@ args = 0, pretend = 0, frame = 8
- 119              		@ frame_needed = 0, uses_anonymous_args = 0
- 120              	.LVL8:
- 121              		.loc 1 216 1 is_stmt 0 view .LVU13
- 122 0000 00B5     		push	{lr}
- 123              		.cfi_def_cfa_offset 4
- 124              		.cfi_offset 14, -4
- 125 0002 83B0     		sub	sp, sp, #12
- 126              		.cfi_def_cfa_offset 16
- 127 0004 1CE0     		b	.L12
- 128              	.LVL9:
- 129              	.L11:
-ARM GAS  /tmp/ccRieNZW.s 			page 7
+  89 0018 134C     		ldr	r4, .L11+12
+  90              		.loc 1 199 7 view .LVU11
+  91 001a 104B     		ldr	r3, .L11
+  92 001c 6268     		ldr	r2, [r4, #4]
+  93 001e 1049     		ldr	r1, .L11+4
+  94 0020 1048     		ldr	r0, .L11+8
+  95 0022 FFF7FEFF 		bl	HAL_CAN_AddTxMessage
+  96              	.LVL7:
+ 200:Core/Src/freertos.c ****       free(msg.pdata);
+  97              		.loc 1 200 7 is_stmt 1 view .LVU12
+  98 0026 6068     		ldr	r0, [r4, #4]
+  99 0028 FFF7FEFF 		bl	free
+ 100              	.LVL8:
+ 101              	.L6:
+ 102              	.LBE2:
+ 201:Core/Src/freertos.c ****     }
+ 202:Core/Src/freertos.c **** 
+ 203:Core/Src/freertos.c ****     
+ 204:Core/Src/freertos.c **** 
+ 205:Core/Src/freertos.c ****     osDelay(1);
+ 103              		.loc 1 205 5 view .LVU13
+ 104 002c 0120     		movs	r0, #1
+ 105 002e FFF7FEFF 		bl	osDelay
+ 106              	.LVL9:
+ 189:Core/Src/freertos.c ****   {
+ 107              		.loc 1 189 3 view .LVU14
+ 108              	.L7:
+ 189:Core/Src/freertos.c ****   {
+ 109              		.loc 1 189 3 view .LVU15
+ 191:Core/Src/freertos.c ****       osMessageQueueReset(CAN_QHandle);
+ 110              		.loc 1 191 5 view .LVU16
+ 191:Core/Src/freertos.c ****       osMessageQueueReset(CAN_QHandle);
+ 111              		.loc 1 191 9 is_stmt 0 view .LVU17
+ 112 0032 0E4D     		ldr	r5, .L11+16
+ 113 0034 2868     		ldr	r0, [r5]
+ 114 0036 FFF7FEFF 		bl	osMessageQueueGetCount
+ 115              	.LVL10:
+ 116 003a 0446     		mov	r4, r0
+ 191:Core/Src/freertos.c ****       osMessageQueueReset(CAN_QHandle);
+ 117              		.loc 1 191 48 discriminator 1 view .LVU18
+ 118 003c 2868     		ldr	r0, [r5]
+ 119 003e FFF7FEFF 		bl	osMessageQueueGetCapacity
+ 120              	.LVL11:
+ 191:Core/Src/freertos.c ****       osMessageQueueReset(CAN_QHandle);
+ 121              		.loc 1 191 8 discriminator 2 view .LVU19
+ 122 0042 8442     		cmp	r4, r0
+ 123 0044 DED2     		bcs	.L9
+ 124              	.L5:
+ 196:Core/Src/freertos.c ****       
+ 125              		.loc 1 196 5 is_stmt 1 view .LVU20
+ 196:Core/Src/freertos.c ****       
+ 126              		.loc 1 196 9 is_stmt 0 view .LVU21
+ 127 0046 4FF0FF33 		mov	r3, #-1
+ 128 004a 0022     		movs	r2, #0
+ 129 004c 0649     		ldr	r1, .L11+12
+ 130 004e 0748     		ldr	r0, .L11+16
+ 131 0050 0068     		ldr	r0, [r0]
+ARM GAS  /tmp/cc0LYPNc.s 			page 7
 
 
- 130              	.LBB2:
- 131              	.LBB3:
- 217:Core/Src/freertos.c ****   /* USER CODE BEGIN Start_RPM_handler */
- 218:Core/Src/freertos.c ****   /* Infinite loop */
- 219:Core/Src/freertos.c ****   for(;;)
- 220:Core/Src/freertos.c ****   {
- 221:Core/Src/freertos.c ****     osEventFlagsWait(itr_eventsHandle, RPM_ITR_FLAG, osFlagsWaitAny, osWaitForever);
- 222:Core/Src/freertos.c ****     for (int i = 0; i < 4; i++) {
- 223:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 132              		.loc 1 223 7 is_stmt 1 view .LVU14
- 133              		.loc 1 223 21 is_stmt 0 view .LVU15
- 134 0006 134A     		ldr	r2, .L14
- 135 0008 52F82300 		ldr	r0, [r2, r3, lsl #2]
- 136              		.loc 1 223 11 view .LVU16
- 137 000c 1249     		ldr	r1, .L14+4
- 138 000e 0A68     		ldr	r2, [r1]
- 139 0010 0244     		add	r2, r2, r0
- 140 0012 0A60     		str	r2, [r1]
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 141              		.loc 1 222 29 is_stmt 1 discriminator 3 view .LVU17
- 142 0014 0133     		adds	r3, r3, #1
- 143              	.LVL10:
- 144              	.L10:
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 145              		.loc 1 222 23 discriminator 1 view .LVU18
- 146 0016 032B     		cmp	r3, #3
- 147 0018 F5DD     		ble	.L11
- 148              	.LBE3:
- 224:Core/Src/freertos.c ****     }
- 225:Core/Src/freertos.c ****     rpm;
- 149              		.loc 1 225 5 view .LVU19
- 226:Core/Src/freertos.c **** 
- 227:Core/Src/freertos.c ****     rpm = rpm* (6/100);
- 150              		.loc 1 227 5 view .LVU20
- 151              		.loc 1 227 9 is_stmt 0 view .LVU21
- 152 001a 0022     		movs	r2, #0
- 153 001c 0E4B     		ldr	r3, .L14+4
- 154              	.LVL11:
- 155              		.loc 1 227 9 view .LVU22
- 156 001e 1A60     		str	r2, [r3]
- 228:Core/Src/freertos.c **** 
- 229:Core/Src/freertos.c ****     rpm_msg qmsg;
- 157              		.loc 1 229 5 is_stmt 1 view .LVU23
- 230:Core/Src/freertos.c ****     qmsg.type = MSG_RPM;
- 158              		.loc 1 230 5 view .LVU24
- 159              		.loc 1 230 15 is_stmt 0 view .LVU25
- 160 0020 8DF80020 		strb	r2, [sp]
- 231:Core/Src/freertos.c ****     osMessageQueuePut(CAN_QHandle,  &qmsg, NULL, 0);
- 161              		.loc 1 231 5 is_stmt 1 view .LVU26
- 162 0024 1346     		mov	r3, r2
- 163 0026 6946     		mov	r1, sp
- 164 0028 0C48     		ldr	r0, .L14+8
- 165 002a 0068     		ldr	r0, [r0]
- 166 002c FFF7FEFF 		bl	osMessageQueuePut
- 167              	.LVL12:
+ 132 0052 FFF7FEFF 		bl	osMessageQueueGet
+ 133              	.LVL12:
+ 196:Core/Src/freertos.c ****       
+ 134              		.loc 1 196 8 discriminator 1 view .LVU22
+ 135 0056 0028     		cmp	r0, #0
+ 136 0058 DED0     		beq	.L10
+ 137 005a E7E7     		b	.L6
+ 138              	.L12:
+ 139              		.align	2
+ 140              	.L11:
+ 141 005c 00000000 		.word	txmailbox
+ 142 0060 00000000 		.word	txheader
+ 143 0064 00000000 		.word	hcan
+ 144 0068 00000000 		.word	msg
+ 145 006c 00000000 		.word	CAN_QHandle
+ 146              		.cfi_endproc
+ 147              	.LFE71:
+ 149              		.section	.text.Start_RPM_handler,"ax",%progbits
+ 150              		.align	1
+ 151              		.global	Start_RPM_handler
+ 152              		.syntax unified
+ 153              		.thumb
+ 154              		.thumb_func
+ 156              	Start_RPM_handler:
+ 157              	.LFB72:
+ 206:Core/Src/freertos.c **** 
+ 207:Core/Src/freertos.c ****     
+ 208:Core/Src/freertos.c ****   }
+ 209:Core/Src/freertos.c ****   /* USER CODE END Start_CAN_handler */
+ 210:Core/Src/freertos.c **** }
+ 211:Core/Src/freertos.c **** 
+ 212:Core/Src/freertos.c **** /* USER CODE BEGIN Header_Start_RPM_handler */
+ 213:Core/Src/freertos.c **** /**
+ 214:Core/Src/freertos.c **** * @brief Function implementing the RPM_handler thread.
+ 215:Core/Src/freertos.c **** * @param argument: Not used
+ 216:Core/Src/freertos.c **** * @retval None
+ 217:Core/Src/freertos.c **** */
+ 218:Core/Src/freertos.c **** /* USER CODE END Header_Start_RPM_handler */
+ 219:Core/Src/freertos.c **** void Start_RPM_handler(void *argument)
+ 220:Core/Src/freertos.c **** {
+ 158              		.loc 1 220 1 is_stmt 1 view -0
+ 159              		.cfi_startproc
+ 160              		@ Volatile: function does not return.
+ 161              		@ args = 0, pretend = 0, frame = 16
+ 162              		@ frame_needed = 0, uses_anonymous_args = 0
+ 163              	.LVL13:
+ 164              		.loc 1 220 1 is_stmt 0 view .LVU24
+ 165 0000 00B5     		push	{lr}
+ 166              		.cfi_def_cfa_offset 4
+ 167              		.cfi_offset 14, -4
+ 168 0002 85B0     		sub	sp, sp, #20
+ 169              		.cfi_def_cfa_offset 24
+ 170              	.LVL14:
+ 171              	.L14:
+ 221:Core/Src/freertos.c ****   /* USER CODE BEGIN Start_RPM_handler */
+ 222:Core/Src/freertos.c ****   /* Infinite loop */
+ 223:Core/Src/freertos.c ****   for(;;)
+ARM GAS  /tmp/cc0LYPNc.s 			page 8
+
+
+ 172              		.loc 1 223 3 is_stmt 1 view .LVU25
+ 173              	.LBB3:
+ 224:Core/Src/freertos.c ****   {
+ 225:Core/Src/freertos.c ****     osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
+ 174              		.loc 1 225 5 view .LVU26
+ 175 0004 114D     		ldr	r5, .L16
+ 176 0006 4FF0FF33 		mov	r3, #-1
+ 177 000a 0022     		movs	r2, #0
+ 178 000c 0121     		movs	r1, #1
+ 179 000e 2868     		ldr	r0, [r5]
+ 180 0010 FFF7FEFF 		bl	osEventFlagsWait
+ 181              	.LVL15:
+ 226:Core/Src/freertos.c ****     can_msg rpm_msg;
+ 182              		.loc 1 226 5 view .LVU27
+ 227:Core/Src/freertos.c ****     rpm_msg.pdata = malloc(sizeof(float));
+ 183              		.loc 1 227 5 view .LVU28
+ 184              		.loc 1 227 21 is_stmt 0 view .LVU29
+ 185 0014 0420     		movs	r0, #4
+ 186 0016 FFF7FEFF 		bl	malloc
+ 187              	.LVL16:
+ 188              		.loc 1 227 19 discriminator 1 view .LVU30
+ 189 001a 0390     		str	r0, [sp, #12]
+ 228:Core/Src/freertos.c ****     rpm_msg.type = MSG_RPM;
+ 190              		.loc 1 228 5 is_stmt 1 view .LVU31
+ 191              		.loc 1 228 18 is_stmt 0 view .LVU32
+ 192 001c 0024     		movs	r4, #0
+ 193 001e 8DF80840 		strb	r4, [sp, #8]
+ 229:Core/Src/freertos.c **** 
+ 230:Core/Src/freertos.c ****     float rpm = rpm_calculate(rpm_itr);
+ 194              		.loc 1 230 5 is_stmt 1 view .LVU33
+ 195              		.loc 1 230 17 is_stmt 0 view .LVU34
+ 196 0022 0B48     		ldr	r0, .L16+4
+ 197 0024 FFF7FEFF 		bl	rpm_calculate
+ 198              	.LVL17:
+ 199              		.loc 1 230 11 discriminator 1 view .LVU35
+ 200 0028 0190     		str	r0, [sp, #4]	@ float
+ 231:Core/Src/freertos.c ****     rpm_msg.pdata = &rpm;
+ 201              		.loc 1 231 5 is_stmt 1 view .LVU36
+ 202              		.loc 1 231 19 is_stmt 0 view .LVU37
+ 203 002a 01AB     		add	r3, sp, #4
+ 204 002c 0393     		str	r3, [sp, #12]
  232:Core/Src/freertos.c **** 
- 233:Core/Src/freertos.c ****     osEventFlagsClear(itr_eventsHandle, RPM_ITR_FLAG);
-ARM GAS  /tmp/ccRieNZW.s 			page 8
+ 233:Core/Src/freertos.c ****     osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
+ 205              		.loc 1 233 5 is_stmt 1 view .LVU38
+ 206 002e 2346     		mov	r3, r4
+ 207 0030 2246     		mov	r2, r4
+ 208 0032 02A9     		add	r1, sp, #8
+ 209 0034 0748     		ldr	r0, .L16+8
+ 210 0036 0068     		ldr	r0, [r0]
+ 211 0038 FFF7FEFF 		bl	osMessageQueuePut
+ 212              	.LVL18:
+ 234:Core/Src/freertos.c **** 
+ 235:Core/Src/freertos.c ****     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
+ 213              		.loc 1 235 5 view .LVU39
+ 214 003c 0121     		movs	r1, #1
+ 215 003e 2868     		ldr	r0, [r5]
+ 216 0040 FFF7FEFF 		bl	osEventFlagsClear
+ARM GAS  /tmp/cc0LYPNc.s 			page 9
 
 
- 168              		.loc 1 233 5 view .LVU27
- 169 0030 0121     		movs	r1, #1
- 170 0032 0B4B     		ldr	r3, .L14+12
- 171 0034 1868     		ldr	r0, [r3]
- 172 0036 FFF7FEFF 		bl	osEventFlagsClear
- 173              	.LVL13:
- 234:Core/Src/freertos.c ****     
- 235:Core/Src/freertos.c ****     osDelay(1);
- 174              		.loc 1 235 5 view .LVU28
- 175 003a 0120     		movs	r0, #1
- 176 003c FFF7FEFF 		bl	osDelay
- 177              	.LVL14:
- 178              	.LBE2:
- 219:Core/Src/freertos.c ****   {
- 179              		.loc 1 219 3 view .LVU29
- 180              	.L12:
- 219:Core/Src/freertos.c ****   {
- 181              		.loc 1 219 3 view .LVU30
- 182              	.LBB5:
- 221:Core/Src/freertos.c ****     for (int i = 0; i < 4; i++) {
- 183              		.loc 1 221 5 view .LVU31
- 184 0040 4FF0FF33 		mov	r3, #-1
- 185 0044 0022     		movs	r2, #0
- 186 0046 0121     		movs	r1, #1
- 187 0048 0548     		ldr	r0, .L14+12
- 188 004a 0068     		ldr	r0, [r0]
- 189 004c FFF7FEFF 		bl	osEventFlagsWait
- 190              	.LVL15:
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 191              		.loc 1 222 5 view .LVU32
- 192              	.LBB4:
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 193              		.loc 1 222 10 view .LVU33
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 194              		.loc 1 222 14 is_stmt 0 view .LVU34
- 195 0050 0023     		movs	r3, #0
- 222:Core/Src/freertos.c ****       rpm += rpm_itr[i];
- 196              		.loc 1 222 5 view .LVU35
- 197 0052 E0E7     		b	.L10
- 198              	.L15:
- 199              		.align	2
- 200              	.L14:
- 201 0054 00000000 		.word	rpm_itr
- 202 0058 00000000 		.word	rpm
- 203 005c 00000000 		.word	CAN_QHandle
- 204 0060 00000000 		.word	itr_eventsHandle
- 205              	.LBE4:
- 206              	.LBE5:
- 207              		.cfi_endproc
- 208              	.LFE72:
- 210              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
- 211              		.align	1
- 212              		.global	MX_FREERTOS_Init
- 213              		.syntax unified
- 214              		.thumb
- 215              		.thumb_func
- 217              	MX_FREERTOS_Init:
-ARM GAS  /tmp/ccRieNZW.s 			page 9
+ 217              	.LVL19:
+ 236:Core/Src/freertos.c ****     
+ 237:Core/Src/freertos.c ****     osDelay(1);
+ 218              		.loc 1 237 5 view .LVU40
+ 219 0044 0120     		movs	r0, #1
+ 220 0046 FFF7FEFF 		bl	osDelay
+ 221              	.LVL20:
+ 222              	.LBE3:
+ 223:Core/Src/freertos.c ****   {
+ 223              		.loc 1 223 3 view .LVU41
+ 224 004a DBE7     		b	.L14
+ 225              	.L17:
+ 226              		.align	2
+ 227              	.L16:
+ 228 004c 00000000 		.word	itr_eventsHandle
+ 229 0050 00000000 		.word	rpm_itr
+ 230 0054 00000000 		.word	CAN_QHandle
+ 231              		.cfi_endproc
+ 232              	.LFE72:
+ 234              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	MX_FREERTOS_Init
+ 237              		.syntax unified
+ 238              		.thumb
+ 239              		.thumb_func
+ 241              	MX_FREERTOS_Init:
+ 242              	.LFB69:
+ 111:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
+ 243              		.loc 1 111 29 view -0
+ 244              		.cfi_startproc
+ 245              		@ args = 0, pretend = 0, frame = 0
+ 246              		@ frame_needed = 0, uses_anonymous_args = 0
+ 247 0000 08B5     		push	{r3, lr}
+ 248              		.cfi_def_cfa_offset 8
+ 249              		.cfi_offset 3, -8
+ 250              		.cfi_offset 14, -4
+ 130:Core/Src/freertos.c **** 
+ 251              		.loc 1 130 3 view .LVU43
+ 130:Core/Src/freertos.c **** 
+ 252              		.loc 1 130 17 is_stmt 0 view .LVU44
+ 253 0002 114A     		ldr	r2, .L20
+ 254 0004 0221     		movs	r1, #2
+ 255 0006 1020     		movs	r0, #16
+ 256 0008 FFF7FEFF 		bl	osMessageQueueNew
+ 257              	.LVL21:
+ 130:Core/Src/freertos.c **** 
+ 258              		.loc 1 130 15 discriminator 1 view .LVU45
+ 259 000c 0F4B     		ldr	r3, .L20+4
+ 260 000e 1860     		str	r0, [r3]
+ 138:Core/Src/freertos.c **** 
+ 261              		.loc 1 138 3 is_stmt 1 view .LVU46
+ 138:Core/Src/freertos.c **** 
+ 262              		.loc 1 138 23 is_stmt 0 view .LVU47
+ 263 0010 0F4A     		ldr	r2, .L20+8
+ 264 0012 0021     		movs	r1, #0
+ 265 0014 0F48     		ldr	r0, .L20+12
+ 266 0016 FFF7FEFF 		bl	osThreadNew
+ARM GAS  /tmp/cc0LYPNc.s 			page 10
 
 
- 218              	.LFB69:
- 107:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
- 219              		.loc 1 107 29 is_stmt 1 view -0
- 220              		.cfi_startproc
- 221              		@ args = 0, pretend = 0, frame = 0
- 222              		@ frame_needed = 0, uses_anonymous_args = 0
- 223 0000 08B5     		push	{r3, lr}
- 224              		.cfi_def_cfa_offset 8
- 225              		.cfi_offset 3, -8
- 226              		.cfi_offset 14, -4
- 126:Core/Src/freertos.c **** 
- 227              		.loc 1 126 3 view .LVU37
- 126:Core/Src/freertos.c **** 
- 228              		.loc 1 126 17 is_stmt 0 view .LVU38
- 229 0002 114A     		ldr	r2, .L18
- 230 0004 0221     		movs	r1, #2
- 231 0006 1020     		movs	r0, #16
- 232 0008 FFF7FEFF 		bl	osMessageQueueNew
- 233              	.LVL16:
- 126:Core/Src/freertos.c **** 
- 234              		.loc 1 126 15 discriminator 1 view .LVU39
- 235 000c 0F4B     		ldr	r3, .L18+4
- 236 000e 1860     		str	r0, [r3]
- 134:Core/Src/freertos.c **** 
- 237              		.loc 1 134 3 is_stmt 1 view .LVU40
- 134:Core/Src/freertos.c **** 
- 238              		.loc 1 134 23 is_stmt 0 view .LVU41
- 239 0010 0F4A     		ldr	r2, .L18+8
- 240 0012 0021     		movs	r1, #0
- 241 0014 0F48     		ldr	r0, .L18+12
- 242 0016 FFF7FEFF 		bl	osThreadNew
- 243              	.LVL17:
- 134:Core/Src/freertos.c **** 
- 244              		.loc 1 134 21 discriminator 1 view .LVU42
- 245 001a 0F4B     		ldr	r3, .L18+16
- 246 001c 1860     		str	r0, [r3]
- 137:Core/Src/freertos.c **** 
- 247              		.loc 1 137 3 is_stmt 1 view .LVU43
- 137:Core/Src/freertos.c **** 
- 248              		.loc 1 137 23 is_stmt 0 view .LVU44
- 249 001e 0F4A     		ldr	r2, .L18+20
- 250 0020 0021     		movs	r1, #0
- 251 0022 0F48     		ldr	r0, .L18+24
- 252 0024 FFF7FEFF 		bl	osThreadNew
- 253              	.LVL18:
- 137:Core/Src/freertos.c **** 
- 254              		.loc 1 137 21 discriminator 1 view .LVU45
- 255 0028 0E4B     		ldr	r3, .L18+28
- 256 002a 1860     		str	r0, [r3]
- 140:Core/Src/freertos.c **** 
- 257              		.loc 1 140 3 is_stmt 1 view .LVU46
- 140:Core/Src/freertos.c **** 
- 258              		.loc 1 140 23 is_stmt 0 view .LVU47
- 259 002c 0E4A     		ldr	r2, .L18+32
- 260 002e 0021     		movs	r1, #0
- 261 0030 0E48     		ldr	r0, .L18+36
- 262 0032 FFF7FEFF 		bl	osThreadNew
-ARM GAS  /tmp/ccRieNZW.s 			page 10
+ 267              	.LVL22:
+ 138:Core/Src/freertos.c **** 
+ 268              		.loc 1 138 21 discriminator 1 view .LVU48
+ 269 001a 0F4B     		ldr	r3, .L20+16
+ 270 001c 1860     		str	r0, [r3]
+ 141:Core/Src/freertos.c **** 
+ 271              		.loc 1 141 3 is_stmt 1 view .LVU49
+ 141:Core/Src/freertos.c **** 
+ 272              		.loc 1 141 23 is_stmt 0 view .LVU50
+ 273 001e 0F4A     		ldr	r2, .L20+20
+ 274 0020 0021     		movs	r1, #0
+ 275 0022 0F48     		ldr	r0, .L20+24
+ 276 0024 FFF7FEFF 		bl	osThreadNew
+ 277              	.LVL23:
+ 141:Core/Src/freertos.c **** 
+ 278              		.loc 1 141 21 discriminator 1 view .LVU51
+ 279 0028 0E4B     		ldr	r3, .L20+28
+ 280 002a 1860     		str	r0, [r3]
+ 144:Core/Src/freertos.c **** 
+ 281              		.loc 1 144 3 is_stmt 1 view .LVU52
+ 144:Core/Src/freertos.c **** 
+ 282              		.loc 1 144 23 is_stmt 0 view .LVU53
+ 283 002c 0E4A     		ldr	r2, .L20+32
+ 284 002e 0021     		movs	r1, #0
+ 285 0030 0E48     		ldr	r0, .L20+36
+ 286 0032 FFF7FEFF 		bl	osThreadNew
+ 287              	.LVL24:
+ 144:Core/Src/freertos.c **** 
+ 288              		.loc 1 144 21 discriminator 1 view .LVU54
+ 289 0036 0E4B     		ldr	r3, .L20+40
+ 290 0038 1860     		str	r0, [r3]
+ 152:Core/Src/freertos.c **** 
+ 291              		.loc 1 152 3 is_stmt 1 view .LVU55
+ 152:Core/Src/freertos.c **** 
+ 292              		.loc 1 152 22 is_stmt 0 view .LVU56
+ 293 003a 0E48     		ldr	r0, .L20+44
+ 294 003c FFF7FEFF 		bl	osEventFlagsNew
+ 295              	.LVL25:
+ 152:Core/Src/freertos.c **** 
+ 296              		.loc 1 152 20 discriminator 1 view .LVU57
+ 297 0040 0D4B     		ldr	r3, .L20+48
+ 298 0042 1860     		str	r0, [r3]
+ 158:Core/Src/freertos.c **** 
+ 299              		.loc 1 158 1 view .LVU58
+ 300 0044 08BD     		pop	{r3, pc}
+ 301              	.L21:
+ 302 0046 00BF     		.align	2
+ 303              	.L20:
+ 304 0048 00000000 		.word	CAN_Q_attributes
+ 305 004c 00000000 		.word	CAN_QHandle
+ 306 0050 00000000 		.word	defaultTask_attributes
+ 307 0054 00000000 		.word	StartDefaultTask
+ 308 0058 00000000 		.word	defaultTaskHandle
+ 309 005c 00000000 		.word	CAN_handler_attributes
+ 310 0060 00000000 		.word	Start_CAN_handler
+ 311 0064 00000000 		.word	CAN_handlerHandle
+ 312 0068 00000000 		.word	RPM_handler_attributes
+ARM GAS  /tmp/cc0LYPNc.s 			page 11
 
 
- 263              	.LVL19:
- 140:Core/Src/freertos.c **** 
- 264              		.loc 1 140 21 discriminator 1 view .LVU48
- 265 0036 0E4B     		ldr	r3, .L18+40
- 266 0038 1860     		str	r0, [r3]
- 148:Core/Src/freertos.c **** 
- 267              		.loc 1 148 3 is_stmt 1 view .LVU49
- 148:Core/Src/freertos.c **** 
- 268              		.loc 1 148 22 is_stmt 0 view .LVU50
- 269 003a 0E48     		ldr	r0, .L18+44
- 270 003c FFF7FEFF 		bl	osEventFlagsNew
- 271              	.LVL20:
- 148:Core/Src/freertos.c **** 
- 272              		.loc 1 148 20 discriminator 1 view .LVU51
- 273 0040 0D4B     		ldr	r3, .L18+48
- 274 0042 1860     		str	r0, [r3]
- 154:Core/Src/freertos.c **** 
- 275              		.loc 1 154 1 view .LVU52
- 276 0044 08BD     		pop	{r3, pc}
- 277              	.L19:
- 278 0046 00BF     		.align	2
- 279              	.L18:
- 280 0048 00000000 		.word	CAN_Q_attributes
- 281 004c 00000000 		.word	CAN_QHandle
- 282 0050 00000000 		.word	defaultTask_attributes
- 283 0054 00000000 		.word	StartDefaultTask
- 284 0058 00000000 		.word	defaultTaskHandle
- 285 005c 00000000 		.word	CAN_handler_attributes
- 286 0060 00000000 		.word	Start_CAN_handler
- 287 0064 00000000 		.word	CAN_handlerHandle
- 288 0068 00000000 		.word	RPM_handler_attributes
- 289 006c 00000000 		.word	Start_RPM_handler
- 290 0070 00000000 		.word	RPM_handlerHandle
- 291 0074 00000000 		.word	itr_events_attributes
- 292 0078 00000000 		.word	itr_eventsHandle
- 293              		.cfi_endproc
- 294              	.LFE69:
- 296              		.global	itr_events_attributes
- 297              		.section	.rodata.str1.4,"aMS",%progbits,1
- 298              		.align	2
- 299              	.LC0:
- 300 0000 6974725F 		.ascii	"itr_events\000"
- 300      6576656E 
- 300      747300
- 301              		.section	.rodata.itr_events_attributes,"a"
- 302              		.align	2
- 305              	itr_events_attributes:
- 306 0000 00000000 		.word	.LC0
- 307 0004 00000000 		.space	12
- 307      00000000 
- 307      00000000 
- 308              		.global	itr_eventsHandle
- 309              		.section	.bss.itr_eventsHandle,"aw",%nobits
- 310              		.align	2
- 313              	itr_eventsHandle:
- 314 0000 00000000 		.space	4
- 315              		.global	CAN_Q_attributes
-ARM GAS  /tmp/ccRieNZW.s 			page 11
+ 313 006c 00000000 		.word	Start_RPM_handler
+ 314 0070 00000000 		.word	RPM_handlerHandle
+ 315 0074 00000000 		.word	itr_events_attributes
+ 316 0078 00000000 		.word	itr_eventsHandle
+ 317              		.cfi_endproc
+ 318              	.LFE69:
+ 320              		.global	itr_events_attributes
+ 321              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 322              		.align	2
+ 323              	.LC0:
+ 324 0000 6974725F 		.ascii	"itr_events\000"
+ 324      6576656E 
+ 324      747300
+ 325              		.section	.rodata.itr_events_attributes,"a"
+ 326              		.align	2
+ 329              	itr_events_attributes:
+ 330 0000 00000000 		.word	.LC0
+ 331 0004 00000000 		.space	12
+ 331      00000000 
+ 331      00000000 
+ 332              		.global	itr_eventsHandle
+ 333              		.section	.bss.itr_eventsHandle,"aw",%nobits
+ 334              		.align	2
+ 337              	itr_eventsHandle:
+ 338 0000 00000000 		.space	4
+ 339              		.global	CAN_Q_attributes
+ 340              		.section	.rodata.str1.4
+ 341 000b 00       		.align	2
+ 342              	.LC1:
+ 343 000c 43414E5F 		.ascii	"CAN_Q\000"
+ 343      5100
+ 344              		.section	.rodata.CAN_Q_attributes,"a"
+ 345              		.align	2
+ 348              	CAN_Q_attributes:
+ 349 0000 0C000000 		.word	.LC1
+ 350 0004 00000000 		.space	20
+ 350      00000000 
+ 350      00000000 
+ 350      00000000 
+ 350      00000000 
+ 351              		.global	CAN_QHandle
+ 352              		.section	.bss.CAN_QHandle,"aw",%nobits
+ 353              		.align	2
+ 356              	CAN_QHandle:
+ 357 0000 00000000 		.space	4
+ 358              		.global	RPM_handler_attributes
+ 359              		.section	.rodata.str1.4
+ 360 0012 0000     		.align	2
+ 361              	.LC2:
+ 362 0014 52504D5F 		.ascii	"RPM_handler\000"
+ 362      68616E64 
+ 362      6C657200 
+ 363              		.section	.rodata.RPM_handler_attributes,"a"
+ 364              		.align	2
+ 367              	RPM_handler_attributes:
+ 368 0000 14000000 		.word	.LC2
+ 369 0004 00000000 		.space	16
+ARM GAS  /tmp/cc0LYPNc.s 			page 12
 
 
- 316              		.section	.rodata.str1.4
- 317 000b 00       		.align	2
- 318              	.LC1:
- 319 000c 43414E5F 		.ascii	"CAN_Q\000"
- 319      5100
- 320              		.section	.rodata.CAN_Q_attributes,"a"
- 321              		.align	2
- 324              	CAN_Q_attributes:
- 325 0000 0C000000 		.word	.LC1
- 326 0004 00000000 		.space	20
- 326      00000000 
- 326      00000000 
- 326      00000000 
- 326      00000000 
- 327              		.global	CAN_QHandle
- 328              		.section	.bss.CAN_QHandle,"aw",%nobits
- 329              		.align	2
- 332              	CAN_QHandle:
- 333 0000 00000000 		.space	4
- 334              		.global	RPM_handler_attributes
- 335              		.section	.rodata.str1.4
- 336 0012 0000     		.align	2
- 337              	.LC2:
- 338 0014 52504D5F 		.ascii	"RPM_handler\000"
- 338      68616E64 
- 338      6C657200 
- 339              		.section	.rodata.RPM_handler_attributes,"a"
- 340              		.align	2
- 343              	RPM_handler_attributes:
- 344 0000 14000000 		.word	.LC2
- 345 0004 00000000 		.space	16
- 345      00000000 
- 345      00000000 
- 345      00000000 
- 346 0014 00020000 		.word	512
- 347 0018 30000000 		.word	48
- 348 001c 00000000 		.space	8
- 348      00000000 
- 349              		.global	RPM_handlerHandle
- 350              		.section	.bss.RPM_handlerHandle,"aw",%nobits
- 351              		.align	2
- 354              	RPM_handlerHandle:
- 355 0000 00000000 		.space	4
- 356              		.global	CAN_handler_attributes
- 357              		.section	.rodata.str1.4
- 358              		.align	2
- 359              	.LC3:
- 360 0020 43414E5F 		.ascii	"CAN_handler\000"
- 360      68616E64 
- 360      6C657200 
- 361              		.section	.rodata.CAN_handler_attributes,"a"
- 362              		.align	2
- 365              	CAN_handler_attributes:
- 366 0000 20000000 		.word	.LC3
- 367 0004 00000000 		.space	16
- 367      00000000 
- 367      00000000 
-ARM GAS  /tmp/ccRieNZW.s 			page 12
+ 369      00000000 
+ 369      00000000 
+ 369      00000000 
+ 370 0014 00020000 		.word	512
+ 371 0018 30000000 		.word	48
+ 372 001c 00000000 		.space	8
+ 372      00000000 
+ 373              		.global	RPM_handlerHandle
+ 374              		.section	.bss.RPM_handlerHandle,"aw",%nobits
+ 375              		.align	2
+ 378              	RPM_handlerHandle:
+ 379 0000 00000000 		.space	4
+ 380              		.global	CAN_handler_attributes
+ 381              		.section	.rodata.str1.4
+ 382              		.align	2
+ 383              	.LC3:
+ 384 0020 43414E5F 		.ascii	"CAN_handler\000"
+ 384      68616E64 
+ 384      6C657200 
+ 385              		.section	.rodata.CAN_handler_attributes,"a"
+ 386              		.align	2
+ 389              	CAN_handler_attributes:
+ 390 0000 20000000 		.word	.LC3
+ 391 0004 00000000 		.space	16
+ 391      00000000 
+ 391      00000000 
+ 391      00000000 
+ 392 0014 00020000 		.word	512
+ 393 0018 18000000 		.word	24
+ 394 001c 00000000 		.space	8
+ 394      00000000 
+ 395              		.global	CAN_handlerHandle
+ 396              		.section	.bss.CAN_handlerHandle,"aw",%nobits
+ 397              		.align	2
+ 400              	CAN_handlerHandle:
+ 401 0000 00000000 		.space	4
+ 402              		.global	defaultTask_attributes
+ 403              		.section	.rodata.str1.4
+ 404              		.align	2
+ 405              	.LC4:
+ 406 002c 64656661 		.ascii	"defaultTask\000"
+ 406      756C7454 
+ 406      61736B00 
+ 407              		.section	.rodata.defaultTask_attributes,"a"
+ 408              		.align	2
+ 411              	defaultTask_attributes:
+ 412 0000 2C000000 		.word	.LC4
+ 413 0004 00000000 		.space	16
+ 413      00000000 
+ 413      00000000 
+ 413      00000000 
+ 414 0014 00020000 		.word	512
+ 415 0018 18000000 		.word	24
+ 416 001c 00000000 		.space	8
+ 416      00000000 
+ 417              		.global	defaultTaskHandle
+ 418              		.section	.bss.defaultTaskHandle,"aw",%nobits
+ARM GAS  /tmp/cc0LYPNc.s 			page 13
 
 
- 367      00000000 
- 368 0014 00020000 		.word	512
- 369 0018 18000000 		.word	24
- 370 001c 00000000 		.space	8
- 370      00000000 
- 371              		.global	CAN_handlerHandle
- 372              		.section	.bss.CAN_handlerHandle,"aw",%nobits
- 373              		.align	2
- 376              	CAN_handlerHandle:
- 377 0000 00000000 		.space	4
- 378              		.global	defaultTask_attributes
- 379              		.section	.rodata.str1.4
- 380              		.align	2
- 381              	.LC4:
- 382 002c 64656661 		.ascii	"defaultTask\000"
- 382      756C7454 
- 382      61736B00 
- 383              		.section	.rodata.defaultTask_attributes,"a"
- 384              		.align	2
- 387              	defaultTask_attributes:
- 388 0000 2C000000 		.word	.LC4
- 389 0004 00000000 		.space	16
- 389      00000000 
- 389      00000000 
- 389      00000000 
- 390 0014 00020000 		.word	512
- 391 0018 18000000 		.word	24
- 392 001c 00000000 		.space	8
- 392      00000000 
- 393              		.global	defaultTaskHandle
- 394              		.section	.bss.defaultTaskHandle,"aw",%nobits
- 395              		.align	2
- 398              	defaultTaskHandle:
- 399 0000 00000000 		.space	4
- 400              		.global	rpm
- 401              		.section	.bss.rpm,"aw",%nobits
- 402              		.align	2
- 405              	rpm:
- 406 0000 00000000 		.space	4
- 407              		.global	can_msg
- 408              		.section	.bss.can_msg,"aw",%nobits
- 409              		.align	2
- 412              	can_msg:
- 413 0000 00000000 		.space	4
- 414              		.text
- 415              	.Letext0:
- 416              		.file 2 "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-n
- 417              		.file 3 "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-n
- 418              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
- 419              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h"
- 420              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
- 421              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_can.h"
- 422              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
- 423              		.file 9 "Core/Inc/msg_types.h"
- 424              		.file 10 "Core/Inc/rpm.h"
-ARM GAS  /tmp/ccRieNZW.s 			page 13
+ 419              		.align	2
+ 422              	defaultTaskHandle:
+ 423 0000 00000000 		.space	4
+ 424              		.global	msg
+ 425              		.section	.bss.msg,"aw",%nobits
+ 426              		.align	2
+ 429              	msg:
+ 430 0000 00000000 		.space	8
+ 430      00000000 
+ 431              		.text
+ 432              	.Letext0:
+ 433              		.file 2 "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-n
+ 434              		.file 3 "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-n
+ 435              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 436              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h"
+ 437              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 438              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_can.h"
+ 439              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
+ 440              		.file 9 "Core/Inc/error.h"
+ 441              		.file 10 "../baja_utils/inc/msg.h"
+ 442              		.file 11 "Core/Inc/can.h"
+ 443              		.file 12 "Core/Inc/rpm.h"
+ 444              		.file 13 "<built-in>"
+ARM GAS  /tmp/cc0LYPNc.s 			page 14
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 freertos.c
-     /tmp/ccRieNZW.s:19     .text.StartDefaultTask:00000000 $t
-     /tmp/ccRieNZW.s:25     .text.StartDefaultTask:00000000 StartDefaultTask
-     /tmp/ccRieNZW.s:51     .text.Start_CAN_handler:00000000 $t
-     /tmp/ccRieNZW.s:57     .text.Start_CAN_handler:00000000 Start_CAN_handler
-     /tmp/ccRieNZW.s:99     .text.Start_CAN_handler:0000002c $d
-     /tmp/ccRieNZW.s:412    .bss.can_msg:00000000 can_msg
-     /tmp/ccRieNZW.s:332    .bss.CAN_QHandle:00000000 CAN_QHandle
-     /tmp/ccRieNZW.s:108    .text.Start_RPM_handler:00000000 $t
-     /tmp/ccRieNZW.s:114    .text.Start_RPM_handler:00000000 Start_RPM_handler
-     /tmp/ccRieNZW.s:201    .text.Start_RPM_handler:00000054 $d
-     /tmp/ccRieNZW.s:405    .bss.rpm:00000000 rpm
-     /tmp/ccRieNZW.s:313    .bss.itr_eventsHandle:00000000 itr_eventsHandle
-     /tmp/ccRieNZW.s:211    .text.MX_FREERTOS_Init:00000000 $t
-     /tmp/ccRieNZW.s:217    .text.MX_FREERTOS_Init:00000000 MX_FREERTOS_Init
-     /tmp/ccRieNZW.s:280    .text.MX_FREERTOS_Init:00000048 $d
-     /tmp/ccRieNZW.s:324    .rodata.CAN_Q_attributes:00000000 CAN_Q_attributes
-     /tmp/ccRieNZW.s:387    .rodata.defaultTask_attributes:00000000 defaultTask_attributes
-     /tmp/ccRieNZW.s:398    .bss.defaultTaskHandle:00000000 defaultTaskHandle
-     /tmp/ccRieNZW.s:365    .rodata.CAN_handler_attributes:00000000 CAN_handler_attributes
-     /tmp/ccRieNZW.s:376    .bss.CAN_handlerHandle:00000000 CAN_handlerHandle
-     /tmp/ccRieNZW.s:343    .rodata.RPM_handler_attributes:00000000 RPM_handler_attributes
-     /tmp/ccRieNZW.s:354    .bss.RPM_handlerHandle:00000000 RPM_handlerHandle
-     /tmp/ccRieNZW.s:305    .rodata.itr_events_attributes:00000000 itr_events_attributes
-     /tmp/ccRieNZW.s:298    .rodata.str1.4:00000000 $d
-     /tmp/ccRieNZW.s:302    .rodata.itr_events_attributes:00000000 $d
-     /tmp/ccRieNZW.s:310    .bss.itr_eventsHandle:00000000 $d
-     /tmp/ccRieNZW.s:321    .rodata.CAN_Q_attributes:00000000 $d
-     /tmp/ccRieNZW.s:329    .bss.CAN_QHandle:00000000 $d
-     /tmp/ccRieNZW.s:340    .rodata.RPM_handler_attributes:00000000 $d
-     /tmp/ccRieNZW.s:351    .bss.RPM_handlerHandle:00000000 $d
-     /tmp/ccRieNZW.s:362    .rodata.CAN_handler_attributes:00000000 $d
-     /tmp/ccRieNZW.s:373    .bss.CAN_handlerHandle:00000000 $d
-     /tmp/ccRieNZW.s:384    .rodata.defaultTask_attributes:00000000 $d
-     /tmp/ccRieNZW.s:395    .bss.defaultTaskHandle:00000000 $d
-     /tmp/ccRieNZW.s:402    .bss.rpm:00000000 $d
-     /tmp/ccRieNZW.s:409    .bss.can_msg:00000000 $d
+     /tmp/cc0LYPNc.s:19     .text.StartDefaultTask:00000000 $t
+     /tmp/cc0LYPNc.s:25     .text.StartDefaultTask:00000000 StartDefaultTask
+     /tmp/cc0LYPNc.s:51     .text.Start_CAN_handler:00000000 $t
+     /tmp/cc0LYPNc.s:57     .text.Start_CAN_handler:00000000 Start_CAN_handler
+     /tmp/cc0LYPNc.s:141    .text.Start_CAN_handler:0000005c $d
+     /tmp/cc0LYPNc.s:429    .bss.msg:00000000 msg
+     /tmp/cc0LYPNc.s:356    .bss.CAN_QHandle:00000000 CAN_QHandle
+     /tmp/cc0LYPNc.s:150    .text.Start_RPM_handler:00000000 $t
+     /tmp/cc0LYPNc.s:156    .text.Start_RPM_handler:00000000 Start_RPM_handler
+     /tmp/cc0LYPNc.s:228    .text.Start_RPM_handler:0000004c $d
+     /tmp/cc0LYPNc.s:337    .bss.itr_eventsHandle:00000000 itr_eventsHandle
+     /tmp/cc0LYPNc.s:235    .text.MX_FREERTOS_Init:00000000 $t
+     /tmp/cc0LYPNc.s:241    .text.MX_FREERTOS_Init:00000000 MX_FREERTOS_Init
+     /tmp/cc0LYPNc.s:304    .text.MX_FREERTOS_Init:00000048 $d
+     /tmp/cc0LYPNc.s:348    .rodata.CAN_Q_attributes:00000000 CAN_Q_attributes
+     /tmp/cc0LYPNc.s:411    .rodata.defaultTask_attributes:00000000 defaultTask_attributes
+     /tmp/cc0LYPNc.s:422    .bss.defaultTaskHandle:00000000 defaultTaskHandle
+     /tmp/cc0LYPNc.s:389    .rodata.CAN_handler_attributes:00000000 CAN_handler_attributes
+     /tmp/cc0LYPNc.s:400    .bss.CAN_handlerHandle:00000000 CAN_handlerHandle
+     /tmp/cc0LYPNc.s:367    .rodata.RPM_handler_attributes:00000000 RPM_handler_attributes
+     /tmp/cc0LYPNc.s:378    .bss.RPM_handlerHandle:00000000 RPM_handlerHandle
+     /tmp/cc0LYPNc.s:329    .rodata.itr_events_attributes:00000000 itr_events_attributes
+     /tmp/cc0LYPNc.s:322    .rodata.str1.4:00000000 $d
+     /tmp/cc0LYPNc.s:326    .rodata.itr_events_attributes:00000000 $d
+     /tmp/cc0LYPNc.s:334    .bss.itr_eventsHandle:00000000 $d
+     /tmp/cc0LYPNc.s:345    .rodata.CAN_Q_attributes:00000000 $d
+     /tmp/cc0LYPNc.s:353    .bss.CAN_QHandle:00000000 $d
+     /tmp/cc0LYPNc.s:364    .rodata.RPM_handler_attributes:00000000 $d
+     /tmp/cc0LYPNc.s:375    .bss.RPM_handlerHandle:00000000 $d
+     /tmp/cc0LYPNc.s:386    .rodata.CAN_handler_attributes:00000000 $d
+     /tmp/cc0LYPNc.s:397    .bss.CAN_handlerHandle:00000000 $d
+     /tmp/cc0LYPNc.s:408    .rodata.defaultTask_attributes:00000000 $d
+     /tmp/cc0LYPNc.s:419    .bss.defaultTaskHandle:00000000 $d
+     /tmp/cc0LYPNc.s:426    .bss.msg:00000000 $d
 
 UNDEFINED SYMBOLS
 osDelay
-osMessageQueueGet
+osMessageQueueReset
 HAL_CAN_AddTxMessage
+free
+osMessageQueueGetCount
+osMessageQueueGetCapacity
+osMessageQueueGet
 txmailbox
 txheader
 hcan
+osEventFlagsWait
+malloc
+rpm_calculate
 osMessageQueuePut
 osEventFlagsClear
-osEventFlagsWait
 rpm_itr
 osMessageQueueNew
 osThreadNew
 osEventFlagsNew
+ARM GAS  /tmp/cc0LYPNc.s 			page 15
+
+

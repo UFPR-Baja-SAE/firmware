@@ -29,19 +29,22 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "msg.h"
 /* USER CODE END Includes */
 
 extern CAN_HandleTypeDef hcan;
 
 /* USER CODE BEGIN Private defines */
-
+typedef struct can_msg {
+  MSG_TYPES type;
+  void* pdata;
+} can_msg;
 /* USER CODE END Private defines */
 
 void MX_CAN_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void can_setup_message(CAN_TxHeaderTypeDef* TxHeader, void* vdata, uint8_t* pmsg, MSG_TYPES type);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -49,4 +52,3 @@ void MX_CAN_Init(void);
 #endif
 
 #endif /* __CAN_H__ */
-
