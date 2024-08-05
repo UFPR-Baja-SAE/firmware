@@ -44,7 +44,9 @@ typedef struct can_msg {
 void MX_CAN_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void can_setup_message(CAN_TxHeaderTypeDef* TxHeader, void* vdata, uint8_t* pmsg, MSG_TYPES type);
+
+void can_send_message(const can_msg* pmsg);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
