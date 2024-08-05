@@ -46,7 +46,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-can_msg *msg;
+
 
 
 
@@ -126,7 +126,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of CAN_Q */
-  CAN_QHandle = osMessageQueueNew (16, sizeof(uint16_t), &CAN_Q_attributes);
+  CAN_QHandle = osMessageQueueNew (8, sizeof(can_msg), &CAN_Q_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -184,15 +184,15 @@ void StartDefaultTask(void *argument)
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
+  can_msg *msg;
   msg = malloc(sizeof(can_msg));
-  msg->pdata = malloc(sizeof(8));
   /* Infinite loop */
   for(;;)
   {
     if (osMessageQueueGetCount(CAN_QHandle) >= osMessageQueueGetCapacity(CAN_QHandle)) {
       osMessageQueueReset(CAN_QHandle);
-      msg->type = MSG_ERROR;
-      *(uint8_t*)msg->pdata = ERROR_CAN_QUEUE_FULL;
+      ERROR_MSG err = ERROR_CAN_QUEUE_FULL;
+      can_setup_message(msg, MSG_ERROR, &err, 1);
       can_send_message(msg);
     }
 
@@ -220,12 +220,12 @@ void Start_RPM_handler(void *argument)
   {
     osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
     can_msg rpm_msg;
-    rpm_msg.pdata = malloc(sizeof(float));
-    rpm_msg.type = MSG_RPM;
+    
 
     float rpm = rpm_calculate(rpm_itr);
     rpm_msg.pdata = &rpm;
 
+    can_setup_message(&rpm_msg, MSG_RPM, &rpm, sizeof(float));
     osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
 
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);

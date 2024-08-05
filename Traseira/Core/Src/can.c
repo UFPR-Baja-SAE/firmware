@@ -141,12 +141,21 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 
 /* USER CODE BEGIN 1 */
 
+
+void can_setup_message(can_msg* pmsg, uint16_t type, const void* pdata, uint16_t size) {
+  pmsg->type = type;
+  pmsg->size = size;
+  pmsg->pdata = malloc(pmsg->size);
+  pmsg->pdata = pdata;
+}
+
 /*
 The stm32F103 only has a single can instance so this will work, if we ever change controllers we have to change this (just add the can handler as a argument)
 */
 
 void can_send_message(const can_msg* pmsg) {
   txheader.StdId = pmsg->type;
+  txheader.DLC = pmsg->size;
   HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*)pmsg->pdata, &txmailbox);
 }
 

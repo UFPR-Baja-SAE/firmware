@@ -37,6 +37,7 @@ extern CAN_HandleTypeDef hcan;
 /* USER CODE BEGIN Private defines */
 typedef struct can_msg {
   MSG_TYPES type;
+  uint8_t size;
   void* pdata;
 } can_msg;
 /* USER CODE END Private defines */
@@ -44,6 +45,7 @@ typedef struct can_msg {
 void MX_CAN_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+void can_setup_message(can_msg* pmsg, MSG_TYPES type, const void* pdata, uint16_t size);
 
 void can_send_message(const can_msg* pmsg);
 
