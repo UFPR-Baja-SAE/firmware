@@ -26,7 +26,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
-#include "error.h"
 #include "can.h"
 /* USER CODE END Includes */
 
@@ -47,7 +46,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-can_msg msg;
+can_msg *msg;
 
 
 
@@ -185,26 +184,23 @@ void StartDefaultTask(void *argument)
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
+  msg = malloc(sizeof(can_msg));
+  msg->pdata = malloc(sizeof(8));
   /* Infinite loop */
   for(;;)
   {
     if (osMessageQueueGetCount(CAN_QHandle) >= osMessageQueueGetCapacity(CAN_QHandle)) {
       osMessageQueueReset(CAN_QHandle);
-      HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*) ERROR_CAN_QUEUE_FULL, &txmailbox);
+      msg->type = MSG_ERROR;
+      *(uint8_t*)msg->pdata = ERROR_CAN_QUEUE_FULL;
+      can_send_message(msg);
     }
 
     if (osMessageQueueGet(CAN_QHandle, &msg, NULL, osWaitForever) == osOK) {
-      
-      
-      HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*)msg.pdata, &txmailbox);
-      free(msg.pdata);
+      can_send_message(msg);
+      free(msg->pdata);
     }
-
-    
-
     osDelay(1);
-
-    
   }
   /* USER CODE END Start_CAN_handler */
 }

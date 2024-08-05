@@ -1,17 +1,18 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "linux-gcc-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Core/Inc",
-                "/home/lorolol/Baja/firmware/baja_utils/inc"
+                "/home/pauli/.baja/firmware/baja_utils/**"
             ],
-            "defines": [],
-            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-arm",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "${default}",
+            "cppStandard": "${default}",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": [
+                ""
+            ],
             "configurationProvider": "ms-vscode.makefile-tools"
         },
         {
@@ -31,7 +32,7 @@
                 "STM32F103xB",
                 "USE_HAL_DRIVER"
             ],
-            "compilerPath": "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/arm-none-eabi-gcc"
+            "compilerPath": "/home/pauli/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/arm-none-eabi-gcc"
         }
     ],
     "version": 4
