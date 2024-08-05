@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
 #include "can.h"
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,6 +79,13 @@ osThreadId_t RPM_handlerHandle;
 const osThreadAttr_t RPM_handler_attributes = {
   .name = "RPM_handler",
   .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime1,
+};
+/* Definitions for ADC_handler */
+osThreadId_t ADC_handlerHandle;
+const osThreadAttr_t ADC_handler_attributes = {
+  .name = "ADC_handler",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for CAN_Q */
@@ -99,6 +107,7 @@ const osEventFlagsAttr_t itr_events_attributes = {
 void StartDefaultTask(void *argument);
 void Start_CAN_handler(void *argument);
 void Start_RPM_handler(void *argument);
+void Start_ADC_handler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -141,6 +150,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of RPM_handler */
   RPM_handlerHandle = osThreadNew(Start_RPM_handler, NULL, &RPM_handler_attributes);
+
+  /* creation of ADC_handler */
+  ADC_handlerHandle = osThreadNew(Start_ADC_handler, NULL, &ADC_handler_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -200,7 +212,6 @@ void Start_CAN_handler(void *argument)
       can_send_message(msg);
       free(msg->pdata);
     }
-    osDelay(1);
   }
   /* USER CODE END Start_CAN_handler */
 }
@@ -229,10 +240,40 @@ void Start_RPM_handler(void *argument)
     osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
 
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
-    
-    osDelay(1);
+
   }
   /* USER CODE END Start_RPM_handler */
+}
+
+/* USER CODE BEGIN Header_Start_ADC_handler */
+/**
+* @brief Function implementing the ADC_handler thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_ADC_handler */
+void Start_ADC_handler(void *argument)
+{
+  /* USER CODE BEGIN Start_ADC_handler */
+  float values[4];
+  ADC_raw_values raw_vals;
+  can_msg* p1;
+  can_msg* p2;
+  /* Infinite loop */
+  for(;;)
+  {
+    ADC_read_values(&raw_vals);
+
+    ADC_convert_values(&raw_vals, values);
+
+    ADC_create_msg(values, p1, p2);
+
+    osMessageQueuePut(CAN_QHandle, p1, NULL, 0);
+    osMessageQueuePut(CAN_QHandle, p2, NULL, 0);
+    osDelay(100);
+    
+  }
+  /* USER CODE END Start_ADC_handler */
 }
 
 /* Private application code --------------------------------------------------*/
