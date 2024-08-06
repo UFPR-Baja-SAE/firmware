@@ -213,7 +213,7 @@ void Start_CAN_handler(void *argument)
       free(msg->pdata);
     }
 
-    if (osSignalWait(CAN_RX_MESSAGE, 0).status == osOK) {
+    if (osThreadFlagsGet() == CAN_RX_MESSAGE) {
       //Handle the message
     }
     osDelay(1);

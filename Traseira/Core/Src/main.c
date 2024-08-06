@@ -79,8 +79,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
-  HAL_CAN_GetRxMessage(&hcan, CAN_RX_FIFO0, &rxheader, rxdata);
-  osSignalSet(CAN_handlerHandle, CAN_RX_MESSAGE);
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxheader, rxdata);
+  osThreadFlagsSet(CAN_handlerHandle, CAN_RX_MESSAGE);
 }
 /* USER CODE END PFP */
 
