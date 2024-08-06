@@ -74,17 +74,17 @@ const osThreadAttr_t CAN_handler_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for RPM_handler */
-osThreadId_t RPM_handlerHandle;
-const osThreadAttr_t RPM_handler_attributes = {
-  .name = "RPM_handler",
+/* Definitions for Itr_handler */
+osThreadId_t Itr_handlerHandle;
+const osThreadAttr_t Itr_handler_attributes = {
+  .name = "Itr_handler",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime1,
 };
-/* Definitions for ADC_handler */
-osThreadId_t ADC_handlerHandle;
-const osThreadAttr_t ADC_handler_attributes = {
-  .name = "ADC_handler",
+/* Definitions for Polling_handler */
+osThreadId_t Polling_handlerHandle;
+const osThreadAttr_t Polling_handler_attributes = {
+  .name = "Polling_handler",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
 };
@@ -106,8 +106,8 @@ const osEventFlagsAttr_t itr_events_attributes = {
 
 void StartDefaultTask(void *argument);
 void Start_CAN_handler(void *argument);
-void Start_RPM_handler(void *argument);
-void Start_ADC_handler(void *argument);
+void Start_Itr_handler(void *argument);
+void Start_Polling_handler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -148,11 +148,11 @@ void MX_FREERTOS_Init(void) {
   /* creation of CAN_handler */
   CAN_handlerHandle = osThreadNew(Start_CAN_handler, NULL, &CAN_handler_attributes);
 
-  /* creation of RPM_handler */
-  RPM_handlerHandle = osThreadNew(Start_RPM_handler, NULL, &RPM_handler_attributes);
+  /* creation of Itr_handler */
+  Itr_handlerHandle = osThreadNew(Start_Itr_handler, NULL, &Itr_handler_attributes);
 
-  /* creation of ADC_handler */
-  ADC_handlerHandle = osThreadNew(Start_ADC_handler, NULL, &ADC_handler_attributes);
+  /* creation of Polling_handler */
+  Polling_handlerHandle = osThreadNew(Start_Polling_handler, NULL, &Polling_handler_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -216,16 +216,16 @@ void Start_CAN_handler(void *argument)
   /* USER CODE END Start_CAN_handler */
 }
 
-/* USER CODE BEGIN Header_Start_RPM_handler */
+/* USER CODE BEGIN Header_Start_Itr_handler */
 /**
-* @brief Function implementing the RPM_handler thread.
+* @brief Function implementing the Itr_handler thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Start_RPM_handler */
-void Start_RPM_handler(void *argument)
+/* USER CODE END Header_Start_Itr_handler */
+void Start_Itr_handler(void *argument)
 {
-  /* USER CODE BEGIN Start_RPM_handler */
+  /* USER CODE BEGIN Start_Itr_handler */
   /* Infinite loop */
   for(;;)
   {
@@ -242,31 +242,31 @@ void Start_RPM_handler(void *argument)
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
 
   }
-  /* USER CODE END Start_RPM_handler */
+  /* USER CODE END Start_Itr_handler */
 }
 
-/* USER CODE BEGIN Header_Start_ADC_handler */
+/* USER CODE BEGIN Header_Start_Polling_handler */
 /**
-* @brief Function implementing the ADC_handler thread.
+* @brief Function implementing the Polling_handler thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_Start_ADC_handler */
-void Start_ADC_handler(void *argument)
+/* USER CODE END Header_Start_Polling_handler */
+void Start_Polling_handler(void *argument)
 {
-  /* USER CODE BEGIN Start_ADC_handler */
+  /* USER CODE BEGIN Start_Polling_handler */
   float values[4];
-  ADC_raw_values raw_vals;
+  adc_raw_values raw_vals;
   can_msg* p1;
   can_msg* p2;
   /* Infinite loop */
   for(;;)
   {
-    ADC_read_values(&raw_vals);
+    adc_read_values(&raw_vals);
 
-    ADC_convert_values(&raw_vals, values);
+    adc_convert_values(&raw_vals, values);
 
-    ADC_create_msg(values, p1, p2);
+    adc_create_msg(values, p1, p2);
 
     osMessageQueuePut(CAN_QHandle, p1, NULL, 0);
     osMessageQueuePut(CAN_QHandle, p2, NULL, 0);
