@@ -30,6 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include "msg.h"
+#include "signals.h"
 /* USER CODE END Includes */
 
 extern CAN_HandleTypeDef hcan;
@@ -48,6 +49,19 @@ void MX_CAN_Init(void);
 void can_setup_message(can_msg* pmsg, MSG_TYPES type, const void* pdata, uint16_t size);
 
 void can_send_message(const can_msg* pmsg);
+
+/*
+what this function should be able to do:
+  set diferent data aqquisition frequencies
+  make the stm go to sleep (not sure if possible)
+  wake up the stm (not sure if possible)
+  turn off each sensor
+  turn on each sensor
+
+this is probably the most important function in here
+having this be very versatile would be amazing for tests and simply not obliterating our storage in the front
+*/
+void can_handle_rx_msg();
 
 /* USER CODE END Prototypes */
 

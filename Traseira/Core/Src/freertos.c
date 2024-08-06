@@ -200,6 +200,10 @@ void Start_CAN_handler(void *argument)
       can_send_message(msg);
       free(msg->pdata);
     }
+
+    if (osSignalWait(CAN_RX_MESSAGE, 0).status == osOK) {
+      //Handle the message
+    }
     osDelay(1);
   }
   /* USER CODE END Start_CAN_handler */

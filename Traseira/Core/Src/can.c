@@ -25,6 +25,9 @@ CAN_TxHeaderTypeDef txheader;
 CAN_FilterTypeDef can_filter;
 uint32_t txmailbox;
 
+CAN_RxHeaderTypeDef rxheader;
+uint8_t* rxdata;
+
 /* USER CODE END 0 */
 
 CAN_HandleTypeDef hcan;
