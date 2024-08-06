@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
 #include "can.h"
+#include "tempcvt.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,6 +81,13 @@ const osThreadAttr_t RPM_handler_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
 };
+/* Definitions for Polling_handler */
+osThreadId_t Polling_handlerHandle;
+const osThreadAttr_t Polling_handler_attributes = {
+  .name = "Polling_handler",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for CAN_Q */
 osMessageQueueId_t CAN_QHandle;
 const osMessageQueueAttr_t CAN_Q_attributes = {
@@ -99,6 +107,7 @@ const osEventFlagsAttr_t itr_events_attributes = {
 void StartDefaultTask(void *argument);
 void Start_CAN_handler(void *argument);
 void Start_RPM_handler(void *argument);
+void StartPolling_handler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -126,7 +135,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of CAN_Q */
-  CAN_QHandle = osMessageQueueNew (8, sizeof(can_msg), &CAN_Q_attributes);
+  CAN_QHandle = osMessageQueueNew (16, sizeof(uint16_t), &CAN_Q_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -141,6 +150,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of RPM_handler */
   RPM_handlerHandle = osThreadNew(Start_RPM_handler, NULL, &RPM_handler_attributes);
+
+  /* creation of Polling_handler */
+  Polling_handlerHandle = osThreadNew(StartPolling_handler, NULL, &Polling_handler_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -237,6 +249,34 @@ void Start_RPM_handler(void *argument)
     osDelay(1);
   }
   /* USER CODE END Start_RPM_handler */
+}
+
+/* USER CODE BEGIN Header_StartPolling_handler */
+/**
+* @brief Function implementing the Polling_handler thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartPolling_handler */
+void StartPolling_handler(void *argument)
+{
+  /* USER CODE BEGIN StartPolling_handler */
+  uint16_t raw;
+  float real;
+
+  can_msg* msg;
+  /* Infinite loop */
+  for(;;)
+  {
+    raw = temp_read();
+    real = temp_convert(raw);
+    can_setup_message(msg, MSG_TEMPERATURE, &real, sizeof(float));
+
+    osMessageQueuePut(CAN_QHandle, msg, NULL, 0);
+
+    osDelay(1);
+  }
+  /* USER CODE END StartPolling_handler */
 }
 
 /* Private application code --------------------------------------------------*/

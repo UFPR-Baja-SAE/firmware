@@ -6,6 +6,7 @@ typedef enum MSG_TYPES {
     MSG_FUEL,
     MSG_VELOCITY,
     MSG_BRAKES,
+    MSG_TEMPERATURE,
     MSG_WARNING,
     MSG_ERROR
 } MSG_TYPES;
