@@ -152,18 +152,21 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void ADC_read_values(ADC_raw_values* raw) {
+void adc_read_values(adc_raw_values* raw) {
   for (int i = 0; i < 4; i++) {
     HAL_ADC_Start(&hadc1);
     HAL_ADC_PollForConversion(&hadc1, 1);
     ((uint16_t*)raw)[i] = HAL_ADC_GetValue(&hadc1);
   }
 }
-void ADC_convert_values(ADC_raw_values* raw, float* conv) {
-  //todo: calculate all the conversion formulas and apply them here
+void adc_convert_values(adc_raw_values* raw, float* conv) {
+  conv[ADC_BAT] = ADC_TO_VOLTAGE * raw->bat * 4;
+
+  //todo: test all the other adc sources and calculate the conversions
+  //the fuel sensor will not be installed for a while so we have to wait on that
 }
 
-void ADC_create_msg(float* conv, can_msg* part1, can_msg* part2) {
+void adc_create_msg(float* conv, can_msg* part1, can_msg* part2) {
   float fp1[2];
   fp1[0] = conv[0];
   fp1[1] = conv[1];

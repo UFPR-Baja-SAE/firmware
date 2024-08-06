@@ -36,6 +36,7 @@ extern "C" {
 extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN Private defines */
+#define ADC_TO_VOLTAGE 1241.2121212121212
 
 typedef enum ADC_ARRAY_INDEX {
   ADC_BAT,
@@ -44,22 +45,22 @@ typedef enum ADC_ARRAY_INDEX {
   ADC_COMB
 } ADC_ARRAY_INDEX;
 
-typedef struct ADC_raw_values {
+typedef struct adc_raw_values {
   uint16_t bat;
   uint16_t freioT;
   uint16_t freioD;
   uint16_t comb;
-} ADC_raw_values;
+} adc_raw_values;
 
 /* USER CODE END Private defines */
 
 void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void ADC_read_values(ADC_raw_values* raw);
-void ADC_convert_values(ADC_raw_values* raw, float* conv);
+void adc_read_values(adc_raw_values* raw);
+void adc_convert_values(adc_raw_values* raw, float* conv);
 
-void ADC_create_msg(float* conv, can_msg* part1, can_msg* part2);
+void adc_create_msg(float* conv, can_msg* part1, can_msg* part2);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
