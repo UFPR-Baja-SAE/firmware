@@ -206,6 +206,8 @@ if a task generates a new message faster than the can_handler task can consume i
 the pointer to the allocated data (pdata) will be changed and the previous will never be freed
 
 this is fucking aids as shit yikes
+
+this will leak anyway, use semaphores so that tasks can't malloc on top of the already allocated memory
 */
 
 void Start_CAN_handler(void *argument)
