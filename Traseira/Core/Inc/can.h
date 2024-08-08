@@ -36,6 +36,12 @@ extern "C" {
 extern CAN_HandleTypeDef hcan;
 
 /* USER CODE BEGIN Private defines */
+
+/*
+you HAVE to create different can_msg objects for each different message you send in a thread cycle,
+since "pdata" only gets freed after being used by the can_handler thread
+*/
+
 typedef struct can_msg {
   MSG_TYPES type;
   uint8_t size;

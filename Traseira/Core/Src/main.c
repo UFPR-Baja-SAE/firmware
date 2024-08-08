@@ -52,6 +52,9 @@ uint8_t rpm_counter;
 uint32_t rpm_last_itr;
 uint32_t rpm_curr_itr;
 
+uint32_t polling_delay, itr_delay, comms_delay;
+
+
 extern CAN_RxHeaderTypeDef rxheader;
 extern uint8_t* rxdata;
 
@@ -81,7 +84,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
   HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxheader, rxdata);
-  osThreadFlagsSet(CAN_handlerHandle, CAN_RX_MESSAGE);
+  osThreadFlagsSet(CAN_handlerHandle, SIGNAL_CAN_RX);
 }
 /* USER CODE END PFP */
 
@@ -98,6 +101,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  polling_delay = FREQ_20_HZ;
+  comms_delay = FREQ_REALTIME;
+  itr_delay = FREQ_REALTIME;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

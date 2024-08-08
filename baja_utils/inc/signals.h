@@ -5,8 +5,7 @@
 if needed increment this one bit at a time
 */
 
-typedef enum GENERAL_SIGNALS {
-  CAN_RX_MESSAGE = 0x1,
-} GENERAL_SIGNALS;
+#define SIGNAL_CAN_RX 0x1
+#define SIGNAL_FREQ 0x2
 
 #endif

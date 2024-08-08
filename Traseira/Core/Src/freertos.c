@@ -58,7 +58,10 @@ extern CAN_HandleTypeDef hcan;
 extern CAN_TxHeaderTypeDef txheader;
 extern uint32_t txmailbox;
 
+extern CAN_RxHeaderTypeDef rxheader;
+extern uint8_t* rxdata;
 
+extern uint32_t polling_delay, itr_delay, comms_delay;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -194,6 +197,17 @@ void StartDefaultTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_CAN_handler */
+
+/*
+todo: see if mail queues are better than regular queues for this (what we are doing is basically a scuffed mail queue anyway)
+
+actually switch to mail queues since message queues used like this can create memory leaks very easily
+if a task generates a new message faster than the can_handler task can consume it's previous message,
+the pointer to the allocated data (pdata) will be changed and the previous will never be freed
+
+this is fucking aids as shit yikes
+*/
+
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
@@ -214,12 +228,26 @@ void Start_CAN_handler(void *argument)
       free(msg->pdata);
     }
 
-    if (osThreadFlagsGet() == CAN_RX_MESSAGE) {
+    /*
+    todo: find a way of not using global variables for this (maybe have 2 different mutexes or whatever)
+    */
+
+    if (osThreadFlagsGet() == SIGNAL_CAN_RX) {
       //Handle the message
+      switch (rxheader.StdId) {
+        case FREQ_ITR:
+          itr_delay = (uint32_t)* rxdata;
+          break;
+        case FREQ_POLLING:
+          polling_delay = (uint32_t)* rxdata;
+          break;
+        case FREQ_COMMS:
+          comms_delay = (uint32_t)* rxdata;
+      }
     }
-    osDelay(1);
-  }
+    osDelay(comms_delay);
   /* USER CODE END Start_CAN_handler */
+  }
 }
 
 /* USER CODE BEGIN Header_Start_Itr_handler */
@@ -238,16 +266,15 @@ void Start_Itr_handler(void *argument)
   for(;;)
   {
     osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
-    
-    
 
     float rpm = rpm_calculate(rpm_itr);
     
-
     can_setup_message(&rpm_msg, MSG_RPM, &rpm, sizeof(float));
     osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
 
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
+
+    osDelay(itr_delay);
 
   }
   /* USER CODE END Start_Itr_handler */
@@ -267,49 +294,34 @@ void Start_Polling_handler(void *argument)
   adc_raw_values raw_vals;
   can_msg* p1;
   can_msg* p2;
+  can_msg* temp;
+  uint16_t raw_temp_cvt;
+  float temp_cvt;
+  temp = malloc(sizeof(can_msg));
   p1 = malloc(sizeof(can_msg));
   p2 = malloc(sizeof(can_msg));
   /* Infinite loop */
   for(;;)
   {
     adc_read_values(&raw_vals);
-
     adc_convert_values(&raw_vals, values);
 
     adc_create_msg(values, p1, p2);
 
     osMessageQueuePut(CAN_QHandle, p1, NULL, 0);
     osMessageQueuePut(CAN_QHandle, p2, NULL, 0);
-    osDelay(100);
+
+    raw_temp_cvt = temp_read();
+    if (raw_temp_cvt <= 0) {
+      //todo: error handling
+    } 
+    else {
+      temp_cvt = temp_convert(raw_temp_cvt);
+      can_setup_message(temp, MSG_TEMPERATURE, &temp_cvt, sizeof(float));
+      osMessageQueuePut(CAN_QHandle, temp, NULL, 0);
+    }
+    osDelay(polling_delay);
     
-  }
-  /* USER CODE END Start_ADC_handler */
-}
-
-/* USER CODE BEGIN Header_StartPolling_handler */
-/**
-* @brief Function implementing the Polling_handler thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartPolling_handler */
-void StartPolling_handler(void *argument)
-{
-  /* USER CODE BEGIN StartPolling_handler */
-  uint16_t raw;
-  float real;
-
-  can_msg* msg;
-  /* Infinite loop */
-  for(;;)
-  {
-    raw = temp_read();
-    real = temp_convert(raw);
-    can_setup_message(msg, MSG_TEMPERATURE, &real, sizeof(float));
-
-    osMessageQueuePut(CAN_QHandle, msg, NULL, 0);
-
-    osDelay(1);
   }
   /* USER CODE END Start_Polling_handler */
 }
