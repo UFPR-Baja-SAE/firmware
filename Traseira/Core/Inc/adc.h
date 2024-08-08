@@ -40,9 +40,10 @@ extern ADC_HandleTypeDef hadc1;
 
 typedef enum ADC_ARRAY_INDEX {
   ADC_BAT,
+  ADC_COMB,
   ADC_FREIOT,
-  ADC_FREIOD,
-  ADC_COMB
+  ADC_FREIOD
+  
 } ADC_ARRAY_INDEX;
 
 typedef struct adc_raw_values {

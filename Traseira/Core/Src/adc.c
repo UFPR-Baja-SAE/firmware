@@ -164,7 +164,16 @@ void adc_convert_values(adc_raw_values* raw, float* conv) {
 
   //todo: test all the other adc sources and calculate the conversions
   //the fuel sensor will not be installed for a while so we have to wait on that
+  //meanwhile just pass the raw values as floats for testing's sake
+
+  conv[ADC_FREIOT] = raw->freioT;
+  conv[ADC_FREIOD] = raw->freioD;
+  conv[ADC_COMB] = raw->comb;
 }
+
+/*
+Have to make 2 messages for this since CAN can only send 8 bytes per message
+*/
 
 void adc_create_msg(float* conv, can_msg* part1, can_msg* part2) {
   float fp1[2];
