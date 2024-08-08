@@ -145,7 +145,7 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 /* USER CODE BEGIN 1 */
 
 
-void can_setup_message(can_msg* pmsg, MSG_TYPES type, const void* pdata, uint16_t size) {
+void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size) {
   pmsg->type = type;
   pmsg->size = size;
   pmsg->pdata = malloc(pmsg->size);

@@ -47,7 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint32_t rpm_itr[4];
+uint32_t rpm_itr[RPM_SAMPLES];
 uint8_t rpm_counter;
 uint32_t rpm_last_itr;
 uint32_t rpm_curr_itr;
