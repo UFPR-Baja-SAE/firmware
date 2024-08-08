@@ -52,7 +52,7 @@
 
 
 
-extern uint32_t rpm_itr[4];
+extern uint32_t rpm_itr[RPM_SAMPLES];
 
 extern CAN_HandleTypeDef hcan;
 extern CAN_TxHeaderTypeDef txheader;
@@ -88,13 +88,6 @@ const osThreadAttr_t Polling_handler_attributes = {
   .name = "Polling_handler",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
-};
-/* Definitions for Polling_handler */
-osThreadId_t Polling_handlerHandle;
-const osThreadAttr_t Polling_handler_attributes = {
-  .name = "Polling_handler",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for CAN_Q */
 osMessageQueueId_t CAN_QHandle;
@@ -239,15 +232,17 @@ void Start_CAN_handler(void *argument)
 void Start_Itr_handler(void *argument)
 {
   /* USER CODE BEGIN Start_Itr_handler */
+  can_msg *rpm_msg;
+  rpm_msg = malloc(sizeof(can_msg));
   /* Infinite loop */
   for(;;)
   {
     osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
-    can_msg rpm_msg;
+    
     
 
     float rpm = rpm_calculate(rpm_itr);
-    rpm_msg.pdata = &rpm;
+    
 
     can_setup_message(&rpm_msg, MSG_RPM, &rpm, sizeof(float));
     osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
@@ -272,6 +267,8 @@ void Start_Polling_handler(void *argument)
   adc_raw_values raw_vals;
   can_msg* p1;
   can_msg* p2;
+  p1 = malloc(sizeof(can_msg));
+  p2 = malloc(sizeof(can_msg));
   /* Infinite loop */
   for(;;)
   {
@@ -314,6 +311,7 @@ void StartPolling_handler(void *argument)
 
     osDelay(1);
   }
+  /* USER CODE END Start_Polling_handler */
 }
 
 /* Private application code --------------------------------------------------*/
