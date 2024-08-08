@@ -21,11 +21,13 @@
 #include "cmsis_os.h"
 #include "adc.h"
 #include "can.h"
+#include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
+#include "signals.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +51,11 @@ uint32_t rpm_itr[4];
 uint8_t rpm_counter;
 uint32_t rpm_last_itr;
 uint32_t rpm_curr_itr;
+
+extern CAN_RxHeaderTypeDef rxheader;
+extern uint8_t* rxdata;
+
+extern osThreadId_t CAN_handlerHandle;
 extern osEventFlagsId_t itr_eventsHandle;
 /* USER CODE END PV */
 
@@ -70,6 +77,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       rpm_counter++;
       break;
   }
+}
+
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxheader, rxdata);
+  osThreadFlagsSet(CAN_handlerHandle, CAN_RX_MESSAGE);
 }
 /* USER CODE END PFP */
 
@@ -108,6 +120,7 @@ int main(void)
   MX_GPIO_Init();
   MX_CAN_Init();
   MX_ADC1_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "rpm.h"
 #include "can.h"
+#include "tempcvt.h"
 #include "adc.h"
 /* USER CODE END Includes */
 
@@ -87,6 +88,13 @@ const osThreadAttr_t Polling_handler_attributes = {
   .name = "Polling_handler",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for Polling_handler */
+osThreadId_t Polling_handlerHandle;
+const osThreadAttr_t Polling_handler_attributes = {
+  .name = "Polling_handler",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for CAN_Q */
 osMessageQueueId_t CAN_QHandle;
@@ -212,6 +220,11 @@ void Start_CAN_handler(void *argument)
       can_send_message(msg);
       free(msg->pdata);
     }
+
+    if (osThreadFlagsGet() == CAN_RX_MESSAGE) {
+      //Handle the message
+    }
+    osDelay(1);
   }
   /* USER CODE END Start_CAN_handler */
 }
@@ -274,6 +287,33 @@ void Start_Polling_handler(void *argument)
     
   }
   /* USER CODE END Start_ADC_handler */
+}
+
+/* USER CODE BEGIN Header_StartPolling_handler */
+/**
+* @brief Function implementing the Polling_handler thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartPolling_handler */
+void StartPolling_handler(void *argument)
+{
+  /* USER CODE BEGIN StartPolling_handler */
+  uint16_t raw;
+  float real;
+
+  can_msg* msg;
+  /* Infinite loop */
+  for(;;)
+  {
+    raw = temp_read();
+    real = temp_convert(raw);
+    can_setup_message(msg, MSG_TEMPERATURE, &real, sizeof(float));
+
+    osMessageQueuePut(CAN_QHandle, msg, NULL, 0);
+
+    osDelay(1);
+  }
 }
 
 /* Private application code --------------------------------------------------*/
