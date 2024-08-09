@@ -5,7 +5,7 @@
 //ADC2 = front and rear break pressure
 //ADC2 will eventually be removed since those sensors will go on the front pcb
 
-typedef enum MSG_TYPES {
+typedef enum {
     MSG_RPM,
     MSG_ADC1,
     MSG_ADC2,
@@ -15,7 +15,7 @@ typedef enum MSG_TYPES {
     MSG_ERROR
 } MSG_TYPES;
 
-typedef enum MSG_FREQ {
+typedef enum {
     FREQ_ITR = 75,
     FREQ_POLLING,
     FREQ_COMMS
@@ -25,7 +25,7 @@ typedef enum MSG_FREQ {
 //not a good idea to send stuff at 100hz or more I think, should test this out
 //can also just send a delay value directly, this is made so it is more legible
 
-typedef enum FREQ_VALUES {
+typedef enum {
     FREQ_1_HZ = 1000,
     FREQ_2_HZ = 500,
     FREQ_3_HZ = 333,
@@ -37,7 +37,7 @@ typedef enum FREQ_VALUES {
     FREQ_REALTIME = 0
 } FREQ_VALUES;
 
-typedef enum ERROR_MSG {
+typedef enum {
     ERROR_CAN_QUEUE_FULL = 25,
     ERROR_NO_RPM,
     ERROR_NO_BATTERY,
@@ -45,7 +45,7 @@ typedef enum ERROR_MSG {
     ERROR_NO_VELOCITY,
 } ERROR_MSG;
 
-typedef enum WARNING_MSG {
+typedef enum {
     WARNING_RPM_HIGH = 50,
     WARNING_RPM_LOW,
     WARNING_BATTERY,
@@ -53,5 +53,21 @@ typedef enum WARNING_MSG {
     WARNING_VELOCITY_HIGH,
     WARNING_VELOCITY_LOW
 } WARNING_MSG;
+
+typedef struct {
+    float rpm;
+    uint32_t timestamp;
+} msg_rpm;
+
+typedef struct {
+    float val1;
+    float val2;
+} msg_adc;
+
+typedef struct {
+    float temp;
+    uint32_t timestamp;
+} msg_tempcvt;
+
 
 #endif

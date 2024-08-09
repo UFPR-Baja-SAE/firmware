@@ -38,7 +38,7 @@ extern ADC_HandleTypeDef hadc1;
 /* USER CODE BEGIN Private defines */
 #define ADC_TO_VOLTAGE 1241.2121212121212
 
-typedef enum ADC_ARRAY_INDEX {
+typedef enum {
   ADC_BAT,
   ADC_COMB,
   ADC_FREIOT,
@@ -46,7 +46,7 @@ typedef enum ADC_ARRAY_INDEX {
   
 } ADC_ARRAY_INDEX;
 
-typedef struct adc_raw_values {
+typedef struct {
   uint16_t bat;
   uint16_t freioT;
   uint16_t freioD;

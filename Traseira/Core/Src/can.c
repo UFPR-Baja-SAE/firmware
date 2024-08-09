@@ -74,6 +74,7 @@ void MX_CAN_Init(void)
   }
   /* USER CODE BEGIN CAN_Init 2 */
   HAL_CAN_ConfigFilter(&hcan, &can_filter);
+  HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
   HAL_CAN_Start(&hcan);
   /* USER CODE END CAN_Init 2 */
 
@@ -151,6 +152,7 @@ memory also never gets freed, you are supposed to malloc just once
 void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size) {
   pmsg->type = type;
   pmsg->size = size;
+  pmsg->pdata = malloc(size);
   pmsg->pdata = pdata;
 }
 

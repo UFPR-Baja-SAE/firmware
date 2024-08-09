@@ -198,8 +198,7 @@ void StartDefaultTask(void *argument)
 */
 /* USER CODE END Header_Start_CAN_handler */
 
-
-
+//Maybe there was never a memory leak and I was just being dumb, anyway now it should work
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
@@ -217,7 +216,7 @@ void Start_CAN_handler(void *argument)
 
     if (osMessageQueueGet(CAN_QHandle, msg, NULL, osWaitForever) == osOK) {
       can_send_message(msg);
-      
+      free(msg->pdata);
     }
 
     /*
@@ -252,18 +251,19 @@ void Start_CAN_handler(void *argument)
 void Start_Itr_handler(void *argument)
 {
   /* USER CODE BEGIN Start_Itr_handler */
-  can_msg *rpm_msg;
-  rpm_msg = malloc(sizeof(can_msg));
-  rpm_msg->pdata = malloc(8);
+  can_msg msg;
+  msg_rpm data;
+  
   /* Infinite loop */
   for(;;)
   {
     osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
 
-    float rpm = rpm_calculate(rpm_itr);
+    data.rpm = rpm_calculate(rpm_itr);
+    data.timestamp = osKernelGetTickCount();
     
-    can_setup_message(&rpm_msg, MSG_RPM, &rpm, sizeof(float));
-    osMessageQueuePut(CAN_QHandle, &rpm_msg, NULL, 0);
+    can_setup_message(&msg, MSG_RPM, &data, sizeof(float));
+    osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
 
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
 
@@ -285,38 +285,43 @@ void Start_Polling_handler(void *argument)
   /* USER CODE BEGIN Start_Polling_handler */
   float values[4];
   adc_raw_values raw_vals;
-  can_msg* p1;
-  can_msg* p2;
-  can_msg* temp;
-  uint16_t raw_temp_cvt;
-  float temp_cvt;
-  temp = malloc(sizeof(can_msg));
-  p1 = malloc(sizeof(can_msg));
-  p2 = malloc(sizeof(can_msg));
+  can_msg p1;
+  can_msg p2;
+  can_msg temp;
 
-  temp->pdata = malloc(8);
-  p1->pdata = malloc(8);
-  p2->pdata = malloc(8);
+  msg_adc padc1;
+  msg_adc padc2;
+
+  msg_tempcvt cvt;
+
+  uint16_t raw_temp_cvt;
   /* Infinite loop */
   for(;;)
   {
     adc_read_values(&raw_vals);
     adc_convert_values(&raw_vals, values);
 
-    adc_create_msg(values, p1, p2);
+    //adc_create_msg(values, &p1, &p2);   eventually fix this shit
 
-    osMessageQueuePut(CAN_QHandle, p1, NULL, 0);
-    osMessageQueuePut(CAN_QHandle, p2, NULL, 0);
+    padc1.val1 = values[0];
+    padc1.val2 = values[1];
+    padc2.val1 = values[2];
+    padc2.val2 = values[3];
+
+    can_setup_message(&p1, MSG_ADC1, &padc1, sizeof(msg_adc));
+    can_setup_message(&p2, MSG_ADC2, &padc2, sizeof(msg_adc));
+
+    osMessageQueuePut(CAN_QHandle, &p1, NULL, 0);
+    osMessageQueuePut(CAN_QHandle, &p2, NULL, 0);
 
     raw_temp_cvt = temp_read();
-    if (raw_temp_cvt <= 0) {
-      //todo: error handling
-    } 
-    else {
-      temp_cvt = temp_convert(raw_temp_cvt);
-      can_setup_message(temp, MSG_TEMPERATURE, &temp_cvt, sizeof(float));
-      osMessageQueuePut(CAN_QHandle, temp, NULL, 0);
-    }
+
+    cvt.temp = temp_convert(raw_temp_cvt);
+    cvt.timestamp = osKernelGetTickCount();
+
+    can_setup_message(&temp, MSG_TEMPERATURE, &cvt, sizeof(msg_tempcvt));
+    osMessageQueuePut(CAN_QHandle, &temp, NULL, 0);
+
     osDelay(polling_delay);
     
   }

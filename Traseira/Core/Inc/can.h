@@ -42,7 +42,7 @@ you HAVE to create different can_msg objects for each different message you send
 since "pdata" only gets freed after being used by the can_handler thread
 */
 
-typedef struct can_msg {
+typedef struct {
   MSG_TYPES type;
   uint8_t size;
   void* pdata;
