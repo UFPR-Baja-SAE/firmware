@@ -35,12 +35,7 @@ extern "C" {
 extern CAN_HandleTypeDef hcan;
 
 /* USER CODE BEGIN Private defines */
-CAN_TxHeaderTypeDef txheader;
-CAN_FilterTypeDef can_filter;
-uint32_t txmailbox;
 
-CAN_RxHeaderTypeDef rxheader;
-uint8_t* rxdata;
 /* USER CODE END Private defines */
 
 void MX_CAN_Init(void);

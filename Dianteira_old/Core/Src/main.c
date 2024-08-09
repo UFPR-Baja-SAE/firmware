@@ -47,6 +47,12 @@
 
 /* USER CODE BEGIN PV */
 uint8_t datacheck;
+extern CAN_TxHeaderTypeDef txheader;
+extern CAN_FilterTypeDef can_filter;
+extern uint32_t txmailbox;
+
+extern CAN_RxHeaderTypeDef rxheader;
+extern uint8_t* rxdata;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,6 +103,13 @@ int main(void)
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   lcd_init();
+  HAL_Delay(10);
+
+  lcd_send_string("Hello world!");
+
+  msg_rpm rpm;
+  msg_adc adc;
+  msg_tempcvt tempcvt;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,7 +117,39 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    
+    if (datacheck) {
+      lcd_clear();
+      switch (rxheader.StdId) {
+        case MSG_RPM :
+          rpm = *(msg_rpm*) rxdata;
+          break;
+        case MSG_ADC1:
+          adc = *(msg_adc*) rxdata;
+          break;
+        case MSG_ADC2:
+          adc = *(msg_adc*) rxdata;
+          break;
+        case MSG_TEMPERATURE:
+          tempcvt = *(msg_tempcvt*) rxdata;
+      }
 
+      char buf[16];
+
+      //maybe sprintf with floats doesn't even wrok, have to test
+
+      sprintf(buf, "rpm %f.1", rpm.rpm);
+      lcd_put_cur(0, 0);
+      lcd_send_string(buf);
+
+      sprintf(buf, " adc %f.1", adc.val1);
+      lcd_send_string(buf);
+
+      sprintf(buf, "cvt %f.1", tempcvt.temp);
+      lcd_put_cur(1, 0);
+      lcd_send_string(buf);
+      datacheck = 0;
+    }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
