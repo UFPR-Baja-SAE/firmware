@@ -198,17 +198,7 @@ void StartDefaultTask(void *argument)
 */
 /* USER CODE END Header_Start_CAN_handler */
 
-/*
-todo: see if mail queues are better than regular queues for this (what we are doing is basically a scuffed mail queue anyway)
 
-actually switch to mail queues since message queues used like this can create memory leaks very easily
-if a task generates a new message faster than the can_handler task can consume it's previous message,
-the pointer to the allocated data (pdata) will be changed and the previous will never be freed
-
-this is fucking aids as shit yikes
-
-this will leak anyway, use semaphores so that tasks can't malloc on top of the already allocated memory
-*/
 
 void Start_CAN_handler(void *argument)
 {
@@ -225,9 +215,9 @@ void Start_CAN_handler(void *argument)
       can_send_message(msg);
     }
 
-    if (osMessageQueueGet(CAN_QHandle, &msg, NULL, osWaitForever) == osOK) {
+    if (osMessageQueueGet(CAN_QHandle, msg, NULL, osWaitForever) == osOK) {
       can_send_message(msg);
-      free(msg->pdata);
+      
     }
 
     /*
@@ -264,6 +254,7 @@ void Start_Itr_handler(void *argument)
   /* USER CODE BEGIN Start_Itr_handler */
   can_msg *rpm_msg;
   rpm_msg = malloc(sizeof(can_msg));
+  rpm_msg->pdata = malloc(8);
   /* Infinite loop */
   for(;;)
   {
@@ -302,6 +293,10 @@ void Start_Polling_handler(void *argument)
   temp = malloc(sizeof(can_msg));
   p1 = malloc(sizeof(can_msg));
   p2 = malloc(sizeof(can_msg));
+
+  temp->pdata = malloc(8);
+  p1->pdata = malloc(8);
+  p2->pdata = malloc(8);
   /* Infinite loop */
   for(;;)
   {

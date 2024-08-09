@@ -144,11 +144,13 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 
 /* USER CODE BEGIN 1 */
 
-
+/*
+this does not allocate any memory, you have to allocate memory for the can_msg* and the pdata* before calling this
+memory also never gets freed, you are supposed to malloc just once
+*/
 void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size) {
   pmsg->type = type;
   pmsg->size = size;
-  pmsg->pdata = malloc(pmsg->size);
   pmsg->pdata = pdata;
 }
 
