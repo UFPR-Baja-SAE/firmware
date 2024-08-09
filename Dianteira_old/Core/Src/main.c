@@ -150,6 +150,8 @@ int main(void)
       lcd_send_string(buf);
       datacheck = 0;
     }
+
+    HAL_Delay(100);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
