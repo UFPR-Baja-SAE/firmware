@@ -1,39 +1,39 @@
 {
-    "configurations": [
-        {
-            "name": "linux-gcc-x64",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/home/pauli/.baja/firmware/baja_utils/**"
-            ],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "${default}",
-            "cppStandard": "${default}",
-            "intelliSenseMode": "linux-gcc-x64",
-            "compilerArgs": [
-                ""
-            ],
-            "configurationProvider": "ms-vscode.makefile-tools"
-        },
-        {
-            "name": "STM32",
-            "includePath": [
-                "../baja_utils/inc",
-                "Core/Inc",
-                "Drivers/CMSIS/Device/ST/STM32F1xx/Include",
-                "Drivers/CMSIS/Include",
-                "Drivers/STM32F1xx_HAL_Driver/Inc",
-                "Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
-                "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
-                "Middlewares/Third_Party/FreeRTOS/Source/include",
-                "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"
-            ],
-            "defines": [
-                "STM32F103xB",
-                "USE_HAL_DRIVER"
-            ],
-            "compilerPath": "/home/pauli/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/arm-none-eabi-gcc"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "linux-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/home/pauli/.baja/firmware/baja_utils/**"
+      ],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "${default}",
+      "cppStandard": "${default}",
+      "intelliSenseMode": "linux-gcc-x64",
+      "compilerArgs": [
+        ""
+      ],
+      "configurationProvider": "ms-vscode.makefile-tools"
+    },
+    {
+      "name": "STM32",
+      "includePath": [
+        "../baja_utils/inc",
+        "Core/Inc",
+        "Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+        "Drivers/CMSIS/Include",
+        "Drivers/STM32F1xx_HAL_Driver/Inc",
+        "Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
+        "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
+        "Middlewares/Third_Party/FreeRTOS/Source/include",
+        "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"
+      ],
+      "defines": [
+        "STM32F103xB",
+        "USE_HAL_DRIVER"
+      ],
+      "compilerPath": "/home/lorolol/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/arm-none-eabi-gcc"
+    }
+  ],
+  "version": 4
 }

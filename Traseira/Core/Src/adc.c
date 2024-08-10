@@ -160,7 +160,7 @@ void adc_read_values(adc_raw_values* raw) {
   }
 }
 void adc_convert_values(adc_raw_values* raw, float* conv) {
-  conv[ADC_BAT] = ADC_TO_VOLTAGE * raw->bat * 4;
+  conv[ADC_BAT] = (raw->bat / ADC_TO_VOLTAGE) * 4;
 
   //todo: test all the other adc sources and calculate the conversions
   //the fuel sensor will not be installed for a while so we have to wait on that

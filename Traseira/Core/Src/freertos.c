@@ -207,7 +207,10 @@ void Start_CAN_handler(void *argument)
   /* Infinite loop */
   for(;;)
   {
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, RESET);
     if (osMessageQueueGetCount(CAN_QHandle) >= osMessageQueueGetCapacity(CAN_QHandle)) {
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
+
       osMessageQueueReset(CAN_QHandle);
       ERROR_MSG err = ERROR_CAN_QUEUE_FULL;
       can_setup_message(msg, MSG_ERROR, &err, 1);
