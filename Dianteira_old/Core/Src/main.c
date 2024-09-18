@@ -52,15 +52,19 @@ extern CAN_FilterTypeDef can_filter;
 extern uint32_t txmailbox;
 
 extern CAN_RxHeaderTypeDef rxheader;
-extern uint8_t* rxdata;
+extern uint8_t rxdata[8];
+
+uint8_t txdata[8];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan1) {
   HAL_CAN_GetRxMessage(&hcan, CAN_RX_FIFO0, &rxheader, rxdata);
   datacheck = 1;
+
+  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 /* USER CODE END PFP */
 
@@ -105,11 +109,28 @@ int main(void)
   lcd_init();
   HAL_Delay(10);
 
+  HAL_CAN_Start(&hcan);
+  HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
+
   lcd_send_string("Hello world!");
 
   msg_rpm rpm;
   msg_adc adc;
   msg_tempcvt tempcvt;
+
+  txheader.DLC = 8;
+  txheader.IDE = CAN_ID_STD;
+  txheader.RTR = CAN_RTR_DATA;
+  txheader.StdId = 0x1;
+
+  txdata[0] = 10;
+  txdata[1] = 20;
+  txdata[3] = 30;
+  txdata[4] = 40;
+  txdata[5] = 50;
+  txdata[6] = 60;
+  txdata[7] = 70;
+  txdata[2] = 80;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,7 +138,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    
+    //HAL_CAN_AddTxMessage(&hcan, &txheader, txdata, &txmailbox);
     if (datacheck) {
       lcd_clear();
       switch (rxheader.StdId) {
@@ -128,7 +149,6 @@ int main(void)
           adc = *(msg_adc*) rxdata;
           break;
         case MSG_ADC2:
-          adc = *(msg_adc*) rxdata;
           break;
         case MSG_TEMPERATURE:
           tempcvt = *(msg_tempcvt*) rxdata;
@@ -138,14 +158,14 @@ int main(void)
 
       //maybe sprintf with floats doesn't even wrok, have to test
 
-      sprintf(buf, "rpm %f.1", rpm.rpm);
+      sprintf(buf, "rpm %3.2f", rpm.rpm);
       lcd_put_cur(0, 0);
       lcd_send_string(buf);
 
-      sprintf(buf, " adc %f.1", adc.val1);
+      sprintf(buf, " adc %3.2f", adc.val1);
       lcd_send_string(buf);
 
-      sprintf(buf, "cvt %f.1", tempcvt.temp);
+      sprintf(buf, "cvt %3.2f", tempcvt.temp);
       lcd_put_cur(1, 0);
       lcd_send_string(buf);
       datacheck = 0;

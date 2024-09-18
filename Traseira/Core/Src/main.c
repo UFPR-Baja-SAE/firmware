@@ -101,8 +101,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  polling_delay = FREQ_20_HZ;
-  comms_delay = FREQ_REALTIME;
+  polling_delay = FREQ_4_HZ;
+  comms_delay = FREQ_20_HZ;
   itr_delay = FREQ_REALTIME;
   /* USER CODE END 1 */
 

@@ -55,6 +55,12 @@ typedef enum {
 } WARNING_MSG;
 
 typedef struct {
+  MSG_TYPES type;
+  uint8_t size;
+  void* pdata;
+} can_msg;
+
+typedef struct {
     float rpm;
     uint32_t timestamp;
 } msg_rpm;

@@ -76,7 +76,7 @@ osThreadId_t CAN_handlerHandle;
 const osThreadAttr_t CAN_handler_attributes = {
   .name = "CAN_handler",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for Itr_handler */
 osThreadId_t Itr_handlerHandle;
@@ -90,7 +90,7 @@ osThreadId_t Polling_handlerHandle;
 const osThreadAttr_t Polling_handler_attributes = {
   .name = "Polling_handler",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for CAN_Q */
 osMessageQueueId_t CAN_QHandle;
@@ -146,8 +146,10 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
+
+  Polling_handlerHandle = osThreadNew(Start_Polling_handler, NULL, &Polling_handler_attributes);
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  
 
   /* creation of CAN_handler */
   CAN_handlerHandle = osThreadNew(Start_CAN_handler, NULL, &CAN_handler_attributes);
@@ -156,7 +158,7 @@ void MX_FREERTOS_Init(void) {
   Itr_handlerHandle = osThreadNew(Start_Itr_handler, NULL, &Itr_handler_attributes);
 
   /* creation of Polling_handler */
-  Polling_handlerHandle = osThreadNew(Start_Polling_handler, NULL, &Polling_handler_attributes);
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -185,7 +187,10 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+
+
+    osDelay(30);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -197,8 +202,6 @@ void StartDefaultTask(void *argument)
 * @retval None
 */
 /* USER CODE END Header_Start_CAN_handler */
-
-//Maybe there was never a memory leak and I was just being dumb, anyway now it should work
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
@@ -218,8 +221,10 @@ void Start_CAN_handler(void *argument)
     }
 
     if (osMessageQueueGet(CAN_QHandle, msg, NULL, osWaitForever) == osOK) {
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
       can_send_message(msg);
       free(msg->pdata);
+      osDelay(1);
     }
 
     /*
@@ -240,8 +245,8 @@ void Start_CAN_handler(void *argument)
       }
     }
     osDelay(comms_delay);
-  /* USER CODE END Start_CAN_handler */
   }
+  /* USER CODE END Start_CAN_handler */
 }
 
 /* USER CODE BEGIN Header_Start_Itr_handler */
@@ -288,9 +293,8 @@ void Start_Polling_handler(void *argument)
   /* USER CODE BEGIN Start_Polling_handler */
   float values[4];
   adc_raw_values raw_vals;
-  can_msg p1;
-  can_msg p2;
-  can_msg temp;
+  can_msg msg_can;
+
 
   msg_adc padc1;
   msg_adc padc2;
@@ -311,19 +315,19 @@ void Start_Polling_handler(void *argument)
     padc2.val1 = values[2];
     padc2.val2 = values[3];
 
-    can_setup_message(&p1, MSG_ADC1, &padc1, sizeof(msg_adc));
-    can_setup_message(&p2, MSG_ADC2, &padc2, sizeof(msg_adc));
+    can_setup_message(&msg_can, MSG_ADC1, &padc1, sizeof(msg_adc));
+    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
 
-    osMessageQueuePut(CAN_QHandle, &p1, NULL, 0);
-    osMessageQueuePut(CAN_QHandle, &p2, NULL, 0);
+    can_setup_message(&msg_can, MSG_ADC2, &padc2, sizeof(msg_adc));
+    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
 
     raw_temp_cvt = temp_read();
 
     cvt.temp = temp_convert(raw_temp_cvt);
     cvt.timestamp = osKernelGetTickCount();
 
-    can_setup_message(&temp, MSG_TEMPERATURE, &cvt, sizeof(msg_tempcvt));
-    osMessageQueuePut(CAN_QHandle, &temp, NULL, 0);
+    can_setup_message(&msg_can, MSG_TEMPERATURE, &cvt, sizeof(msg_tempcvt));
+    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
 
     osDelay(polling_delay);
     

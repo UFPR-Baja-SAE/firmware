@@ -36,7 +36,7 @@ extern "C" {
 extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN Private defines */
-#define ADC_TO_VOLTAGE 1241.2121212121212
+#define ADC_TO_VOLTAGE 0.0008
 
 typedef enum {
   ADC_BAT,
