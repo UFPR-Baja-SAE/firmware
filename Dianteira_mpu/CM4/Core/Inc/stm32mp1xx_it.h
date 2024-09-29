@@ -51,12 +51,13 @@ void HardFault_Handler(void);
 void MemManage_Handler(void);
 void BusFault_Handler(void);
 void UsageFault_Handler(void);
-void SVC_Handler(void);
 void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
+void FDCAN2_IT0_IRQHandler(void);
+void TIM1_UP_IRQHandler(void);
+void UART7_IRQHandler(void);
 void IPCC_RX1_IRQHandler(void);
 void IPCC_TX1_IRQHandler(void);
+void I2C5_EV_IRQHandler(void);
 void RCC_WAKEUP_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 

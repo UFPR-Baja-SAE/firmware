@@ -1,4 +1,4 @@
-MANIFEST_VERSION = openstlinux-6.1-yocto-mickledore-mp1-v23.06.21
+MANIFEST_VERSION = openstlinux-6.1-yocto-mickledore-mpu-v24.06.26
 KERNEL_DT = ./DeviceTree/Dianteira_mpu/kernel
 OPTEE_DT = ./DeviceTree/Dianteira_mpu/optee-os
 UBOOT_DT = ./DeviceTree/Dianteira_mpu/u-boot

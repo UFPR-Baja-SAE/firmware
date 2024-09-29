@@ -18,10 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "dma.h"
 #include "fdcan.h"
+#include "i2c.h"
 #include "ipcc.h"
 #include "openamp.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -54,6 +57,7 @@ VIRT_UART_HandleTypeDef vuart;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) {
 	//HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState)
@@ -112,10 +116,23 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_FDCAN2_Init();
+  MX_I2C5_Init();
+  MX_UART7_Init();
   /* USER CODE BEGIN 2 */
   uint8_t buff[16] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5};
   size_t bsize = sizeof(buff);
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -162,14 +179,14 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL2.PLLP = 2;
   RCC_OscInitStruct.PLL2.PLLQ = 1;
   RCC_OscInitStruct.PLL2.PLLR = 1;
-  RCC_OscInitStruct.PLL2.PLLFRACV = 0x1400;
+  RCC_OscInitStruct.PLL2.PLLFRACV = 5120;
   RCC_OscInitStruct.PLL2.PLLMODE = RCC_PLL_FRACTIONAL;
   RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL3.PLLSource = RCC_PLL3SOURCE_HSE;
-  RCC_OscInitStruct.PLL3.PLLM = 2;
-  RCC_OscInitStruct.PLL3.PLLN = 36;
+  RCC_OscInitStruct.PLL3.PLLSource = RCC_PLL3SOURCE_HSI;
+  RCC_OscInitStruct.PLL3.PLLM = 4;
+  RCC_OscInitStruct.PLL3.PLLN = 27;
   RCC_OscInitStruct.PLL3.PLLP = 3;
-  RCC_OscInitStruct.PLL3.PLLQ = 3;
+  RCC_OscInitStruct.PLL3.PLLQ = 12;
   RCC_OscInitStruct.PLL3.PLLR = 37;
   RCC_OscInitStruct.PLL3.PLLRGE = RCC_PLL3IFRANGE_1;
   RCC_OscInitStruct.PLL3.PLLFRACV = 0;
@@ -236,6 +253,27 @@ void PeriphCommonClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
