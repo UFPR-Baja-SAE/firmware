@@ -1,0 +1,5 @@
+../Core/Src/app_freertos.c:115:6:MX_FREERTOS_Init	8	static
+../Core/Src/app_freertos.c:177:6:StartDefaultTask	16	static
+../Core/Src/app_freertos.c:195:6:StartTxCommsTask	160	static
+../Core/Src/app_freertos.c:226:6:StartRxCommsTask	16	static
+../Core/Src/app_freertos.c:244:6:StartSysInitTask	16	static

@@ -7,10 +7,10 @@
 
 typedef enum {
     MSG_RPM,
-    MSG_ADC1,
-    MSG_ADC2,
     MSG_VELOCITY,
     MSG_TEMPERATURE,
+	MSG_GPS,
+    MSG_FUEL,
     MSG_WARNING,
     MSG_ERROR
 } MSG_TYPES;

@@ -146,7 +146,7 @@ typedef struct
 
 } E22;
 
-HAL_StatusTypeDef lora_init( E22* module, E22_config* cfg, GPIO_TypeDef* GPIOX,
+HAL_StatusTypeDef lora_init(E22* module, E22_config* cfg, GPIO_TypeDef* GPIOX,
 							uint16_t m0, uint16_t m1, uint16_t aux, UART_HandleTypeDef* huart);
 
 HAL_StatusTypeDef lora_setmode(E22* module, LORA_MODE mode);

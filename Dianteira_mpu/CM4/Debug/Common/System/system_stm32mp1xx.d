@@ -1,5 +1,5 @@
 Common/System/system_stm32mp1xx.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Common/System/system_stm32mp1xx.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Common/System/system_stm32mp1xx.c \
  ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp1xx.h \
  ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp157fxx_cm4.h \
  ../../Drivers/CMSIS/Include/core_cm4.h \
@@ -22,9 +22,15 @@ Common/System/system_stm32mp1xx.o: \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_mdma.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_cortex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_fdcan.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_i2c.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_i2c_ex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_ipcc.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_pwr.h \
- ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_pwr_ex.h
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_pwr_ex.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h \
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h
 ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp1xx.h:
 ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp157fxx_cm4.h:
 ../../Drivers/CMSIS/Include/core_cm4.h:
@@ -47,6 +53,12 @@ Common/System/system_stm32mp1xx.o: \
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_mdma.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_cortex.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_fdcan.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_i2c.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_i2c_ex.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_ipcc.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_pwr.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_pwr_ex.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h:
+../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h:

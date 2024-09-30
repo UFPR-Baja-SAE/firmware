@@ -51,7 +51,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-VIRT_UART_HandleTypeDef vuart;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,7 +108,6 @@ int main(void)
   }
 
   /* USER CODE BEGIN SysInit */
-  VIRT_UART_Init(&vuart);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */

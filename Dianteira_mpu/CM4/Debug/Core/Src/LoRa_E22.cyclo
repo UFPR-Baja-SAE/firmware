@@ -1,0 +1,5 @@
+../Core/Src/LoRa_E22.c:20:19:lora_setmode	9
+../Core/Src/LoRa_E22.c:76:19:lora_write_register	3
+../Core/Src/LoRa_E22.c:104:19:lora_init	1
+../Core/Src/LoRa_E22.c:137:19:lora_write_message	2
+../Core/Src/LoRa_E22.c:150:19:lora_read_message	1

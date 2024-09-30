@@ -26,6 +26,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "LoRa_E22.h"
+#include "virt_uart.h"
+#include "msg.h"
 
 /* USER CODE END Includes */
 
@@ -46,7 +49,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+extern UART_HandleTypeDef huart7;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -192,10 +195,23 @@ void StartDefaultTask(void *argument)
 void StartTxCommsTask(void *argument)
 {
   /* USER CODE BEGIN StartTxCommsTask */
+	E22 lora;
+	E22_config lora_cfg;
+
+	VIRT_UART_HandleTypeDef vuart;
+
+	VIRT_UART_Init(&vuart);	//the max vuart message size is 512 bytes
+
+	lora_init(&lora, &lora_cfg, GPIOF, GPIO_PIN_4, GPIO_PIN_6, GPIO_PIN_3, &huart7);
   /* Infinite loop */
   for(;;)
   {
+
+
+
+
     osDelay(1);
+
   }
   /* USER CODE END StartTxCommsTask */
 }
