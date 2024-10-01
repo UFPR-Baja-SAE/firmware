@@ -78,8 +78,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
  ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h ../Core/Inc/usart.h \
  ../Core/Inc/gpio.h \
- ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
- /home/pauli/baja/firmware/Dianteira_mpu/baja_utils/inc/msg.h
+ ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h
 ../Core/Inc/main.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
@@ -167,4 +166,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:
 ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
-/home/pauli/baja/firmware/Dianteira_mpu/baja_utils/inc/msg.h:

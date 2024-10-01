@@ -30,7 +30,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "virt_uart.h"
-#include "msg.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -136,8 +135,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  VIRT_UART_Transmit(&vuart, buff, bsize);
-	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

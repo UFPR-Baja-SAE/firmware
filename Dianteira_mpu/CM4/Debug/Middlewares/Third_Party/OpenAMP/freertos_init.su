@@ -1,2 +1,2 @@
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c:18:5:metal_sys_init	16	static
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c:25:6:metal_sys_finish	8	static
+/home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c:18:5:metal_sys_init	16	static
+/home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c:25:6:metal_sys_finish	8	static

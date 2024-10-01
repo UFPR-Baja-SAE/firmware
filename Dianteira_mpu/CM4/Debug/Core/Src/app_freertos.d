@@ -42,8 +42,7 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- /home/pauli/baja/firmware/Dianteira_mpu/baja_utils/inc/msg.h \
- ../Core/Inc/LoRa_E22.h \
+ ../Core/Inc/fdcan.h ../Core/Inc/main.h ../Core/Inc/LoRa_E22.h \
  ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
  ../OPENAMP/openamp.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/open_amp.h \
@@ -79,7 +78,9 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/spinlock.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
- ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h
+ ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -123,7 +124,8 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-/home/pauli/baja/firmware/Dianteira_mpu/baja_utils/inc/msg.h:
+../Core/Inc/fdcan.h:
+../Core/Inc/main.h:
 ../Core/Inc/LoRa_E22.h:
 ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
 ../OPENAMP/openamp.h:
@@ -162,3 +164,5 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h:
 ../OPENAMP/openamp_conf.h:
 ../OPENAMP/mbox_ipcc.h:
+/home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h:
+/home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h:

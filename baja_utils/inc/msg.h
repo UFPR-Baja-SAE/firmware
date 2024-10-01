@@ -1,6 +1,5 @@
 #ifndef MSG_H
 #define MSG_H
-
 //ADC1 = battery and fuel
 //ADC2 = front and rear break pressure
 //ADC2 will eventually be removed since those sensors will go on the front pcb
@@ -40,40 +39,50 @@ typedef enum {
 typedef enum {
     ERROR_CAN_QUEUE_FULL = 25,
     ERROR_NO_RPM,
-    ERROR_NO_BATTERY,
-    ERROR_NO_FUEL,
     ERROR_NO_VELOCITY,
+	ERROR_NO_TEMP,
 } ERROR_MSG;
 
 typedef enum {
     WARNING_RPM_HIGH = 50,
     WARNING_RPM_LOW,
-    WARNING_BATTERY,
     WARNING_FUEL,
     WARNING_VELOCITY_HIGH,
-    WARNING_VELOCITY_LOW
 } WARNING_MSG;
 
 typedef struct {
   MSG_TYPES type;
   uint8_t size;
   void* pdata;
-} can_msg;
+} msg_all;
 
 typedef struct {
-    float rpm;
+	uint8_t bfuel		//this is a boolean
+	uint32_t timestamp;
+} msg_fuel;
+
+typedef struct {
+	uint32_t spd;
+	uint32_t timestamp;
+} msg_vel;
+
+typedef struct {
+    uint32_t rpm;
     uint32_t timestamp;
 } msg_rpm;
 
 typedef struct {
-    float val1;
-    float val2;
-} msg_adc;
-
-typedef struct {
-    float temp;
+    uint32_t temp;
     uint32_t timestamp;
 } msg_tempcvt;
+
+
+typedef struct {
+	uint8_t code;
+	uint32_t timestamp;
+} msg_error;
+
+
 
 
 #endif

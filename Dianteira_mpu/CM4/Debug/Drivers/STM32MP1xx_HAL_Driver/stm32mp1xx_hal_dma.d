@@ -1,5 +1,5 @@
 Drivers/STM32MP1xx_HAL_Driver/stm32mp1xx_hal_dma.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h \
  ../Core/Inc/stm32mp1xx_hal_conf.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h \

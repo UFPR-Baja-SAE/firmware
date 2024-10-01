@@ -22,13 +22,15 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os.h"
-#include "msg.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "fdcan.h"
+
 #include "LoRa_E22.h"
 #include "virt_uart.h"
 #include "msg.h"
+#include "signals.h"
 
 /* USER CODE END Includes */
 
@@ -138,7 +140,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of TxQueue */
-  TxQueueHandle = osMessageQueueNew (16, sizeof(uint16_t), &TxQueue_attributes);
+  TxQueueHandle = osMessageQueueNew (16, sizeof(msg_all), &TxQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -197,12 +199,14 @@ void StartTxCommsTask(void *argument)
   /* USER CODE BEGIN StartTxCommsTask */
 	E22 lora;
 	E22_config lora_cfg;
+	msg_all msg;
 
 	VIRT_UART_HandleTypeDef vuart;
 
 	VIRT_UART_Init(&vuart);	//the max vuart message size is 512 bytes
 
 	lora_init(&lora, &lora_cfg, GPIOF, GPIO_PIN_4, GPIO_PIN_6, GPIO_PIN_3, &huart7);
+
   /* Infinite loop */
   for(;;)
   {
@@ -226,11 +230,47 @@ void StartTxCommsTask(void *argument)
 void StartRxCommsTask(void *argument)
 {
   /* USER CODE BEGIN StartRxCommsTask */
+	FDCAN_RxHeaderTypeDef head;
+	uint8_t rxdata[8];
+
+	msg_all generic;
+	msg_tempcvt temp;
+	msg_rpm rpm;
+	msg_vel spd;
+	msg_fuel fuel;
+	msg_error err;
+
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+	for(;;)
+	{
+		osThreadFlagsWait(SIGNAL_CAN_RX, osFlagsWaitAny, osWaitForever);
+		HAL_FDCAN_GetRxMessage(&hfdcan2, FDCAN_RX_FIFO0, &head, rxdata);
+
+		switch (head.Identifier) {
+			case MSG_FUEL:
+				fuel = *(msg_fuel*) rxdata;
+				break;
+			case MSG_RPM:
+				rpm = *(msg_rpm*) rxdata;
+				break;
+			case MSG_VELOCITY:
+				spd = *(msg_vel*) rxdata;
+				break;
+			case MSG_TEMPERATURE:
+				temp = *(msg_tempcvt*) rxdata;
+				break;
+			case MSG_ERROR:
+				err = *(msg_error*) rxdata;
+				break;
+			case MSG_WARNING:
+				err = *(msg_error*) rxdata;
+		}
+		//TODO: make error handling stuffs and things
+
+
+
+		osDelay(1);
+	}
   /* USER CODE END StartRxCommsTask */
 }
 

@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/rpmsg.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg.c \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/compiler.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/compiler/gcc/compiler.h \
@@ -22,7 +22,7 @@ Middlewares/Third_Party/OpenAMP/rpmsg.o: \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/utilities.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/alloc.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/alloc.h \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/compiler.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/compiler/gcc/compiler.h:
@@ -45,4 +45,4 @@ Middlewares/Third_Party/OpenAMP/rpmsg.o: \
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/utilities.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/alloc.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/alloc.h:
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h:
+/home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h:
