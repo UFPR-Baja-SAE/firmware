@@ -1,8 +1,7 @@
 #ifndef MSG_H
 #define MSG_H
-//ADC1 = battery and fuel
-//ADC2 = front and rear break pressure
-//ADC2 will eventually be removed since those sensors will go on the front pcb
+
+#include "fdcan.h"
 
 typedef enum {
     MSG_RPM,
@@ -84,5 +83,7 @@ typedef struct {
 
 
 
+void msg_unpack_can(msg_all* gen, FDCAN_RxHeaderTypeDef rxheader, uint8_t* rxdata);
+void msg_pack_can(msg_all* gen, FDCAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata);
 
 #endif

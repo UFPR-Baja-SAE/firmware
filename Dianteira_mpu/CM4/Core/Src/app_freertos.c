@@ -234,11 +234,6 @@ void StartRxCommsTask(void *argument)
 	uint8_t rxdata[8];
 
 	msg_all generic;
-	msg_tempcvt temp;
-	msg_rpm rpm;
-	msg_vel spd;
-	msg_fuel fuel;
-	msg_error err;
 
   /* Infinite loop */
 	for(;;)
@@ -246,24 +241,14 @@ void StartRxCommsTask(void *argument)
 		osThreadFlagsWait(SIGNAL_CAN_RX, osFlagsWaitAny, osWaitForever);
 		HAL_FDCAN_GetRxMessage(&hfdcan2, FDCAN_RX_FIFO0, &head, rxdata);
 
-		switch (head.Identifier) {
-			case MSG_FUEL:
-				fuel = *(msg_fuel*) rxdata;
-				break;
-			case MSG_RPM:
-				rpm = *(msg_rpm*) rxdata;
-				break;
-			case MSG_VELOCITY:
-				spd = *(msg_vel*) rxdata;
-				break;
-			case MSG_TEMPERATURE:
-				temp = *(msg_tempcvt*) rxdata;
-				break;
-			case MSG_ERROR:
-				err = *(msg_error*) rxdata;
-				break;
-			case MSG_WARNING:
-				err = *(msg_error*) rxdata;
+		if (head.Identifier != ERROR_MSG && head.Identifier != WARNING_MSG) {
+			generic.pdata = malloc(head.DataLength);
+			memcpy(generic.pdata, rxdata);
+			generic.type = head.Identifier;
+			generic.size = head.DataLength;
+
+			osMessageQueuePut(TxQueueHandle, &generic, NULL, 0);
+
 		}
 		//TODO: make error handling stuffs and things
 
