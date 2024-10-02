@@ -1,6 +1,6 @@
 Middlewares/Third_Party/OpenAMP/virt_uart.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
  ../OPENAMP/openamp.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/open_amp.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h \
@@ -44,7 +44,7 @@ Middlewares/Third_Party/OpenAMP/virt_uart.o: \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
  ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h
-/home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
+/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
 ../OPENAMP/openamp.h:
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/open_amp.h:
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h:

@@ -56,7 +56,7 @@ typedef struct {
 } msg_all;
 
 typedef struct {
-	uint8_t bfuel		//this is a boolean
+	uint8_t bfuel;		//this is a boolean
 	uint32_t timestamp;
 } msg_fuel;
 
@@ -82,8 +82,11 @@ typedef struct {
 } msg_error;
 
 
+void msg_create_generic(msg_all* out, size_t len, MSG_TYPES type, uint8_t* in);
 
-void msg_unpack_can(msg_all* gen, FDCAN_RxHeaderTypeDef rxheader, uint8_t* rxdata);
-void msg_pack_can(msg_all* gen, FDCAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata);
+void msg_unpack_can(msg_all* gen, FDCAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata);
+void msg_pack_can(msg_all* gen, FDCAN_TxHeaderTypeDef* rxheader, uint8_t* rxdata);
+
+void msg_pack_serial(msg_all* gen, uint8_t* data);
 
 #endif

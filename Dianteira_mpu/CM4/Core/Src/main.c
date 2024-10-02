@@ -24,12 +24,15 @@
 #include "i2c.h"
 #include "ipcc.h"
 #include "openamp.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "virt_uart.h"
+
+#include "signals.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern osThreadId_t RxCommsHandle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,7 +62,7 @@ void PeriphCommonClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) {
-	//HAL_GPIO_WritePin(GPIOx, GPIO_Pin, PinState)
+	osThreadFlagsSet(RxCommsHandle, SIGNAL_CAN_RX);
 }
 /* USER CODE END PFP */
 
@@ -115,9 +119,10 @@ int main(void)
   MX_FDCAN2_Init();
   MX_I2C5_Init();
   MX_UART7_Init();
+  MX_TIM2_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t buff[16] = {1,2,3,4,5,6,7,8,9,0,1,2,3,4,5};
-  size_t bsize = sizeof(buff);
+  HAL_FDCAN_Start(&hfdcan2);
   /* USER CODE END 2 */
 
   /* Init scheduler */

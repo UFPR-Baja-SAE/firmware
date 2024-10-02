@@ -3,6 +3,22 @@
 
 #include <stm32mp1xx_hal.h>
 
+#define LORA_CREATE_DEFAULT_CONFIG(NAME) E22_config NAME = {		\
+	.addr = 0x7272,													\
+	.netid = 0x27,													\
+	.channel = 0x07,												\
+	.crypt_key = 0x1324,											\
+	.bps = LORA_UART_9600,											\
+	.air_rate = LORA_AIR_2400,										\
+	.pkt_size = LORA_PACKET_240,									\
+	.rssi_read_en = LORA_RSSI_READ_DISABLE,							\
+	.pwr = LORA_POWER_22,											\
+	.rssi_en = LORA_RSSI_DISABLE,									\
+	.lbt_en = LORA_LBT_DISABLE,										\
+	.wor_ctrl = LORA_WOR_RX,										\
+	.wor_cycle = LORA_WOR_2000										\
+};
+
 typedef enum
 {
 	LORA_MODE_NORMAL,

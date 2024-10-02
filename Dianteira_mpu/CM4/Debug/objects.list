@@ -66,3 +66,4 @@
 "./OPENAMP/openamp.o"
 "./OPENAMP/openamp_log.o"
 "./OPENAMP/rsc_table.o"
+"./baja_utils/src/msg.o"

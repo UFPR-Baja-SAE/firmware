@@ -1,5 +1,5 @@
 Common/System/system_stm32mp1xx.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Common/System/system_stm32mp1xx.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Common/System/system_stm32mp1xx.c \
  ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp1xx.h \
  ../../Drivers/CMSIS/Device/ST/STM32MP1xx/Include/stm32mp157fxx_cm4.h \
  ../../Drivers/CMSIS/Include/core_cm4.h \

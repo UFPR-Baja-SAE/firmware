@@ -31,7 +31,14 @@ void MX_FDCAN2_Init(void)
 {
 
   /* USER CODE BEGIN FDCAN2_Init 0 */
+	FDCAN_FilterTypeDef filter;
 
+	filter.IdType = FDCAN_STANDARD_ID;
+	filter.FilterIndex = 0;
+	filter.FilterType = FDCAN_FILTER_RANGE;
+	filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
+	filter.FilterID1 = 0;
+	filter.FilterID2 = 0x7FF;				//TODO: test if this works with the current setup
   /* USER CODE END FDCAN2_Init 0 */
 
   /* USER CODE BEGIN FDCAN2_Init 1 */
@@ -70,6 +77,9 @@ void MX_FDCAN2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN FDCAN2_Init 2 */
+  if (HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, NULL) != HAL_OK) {
+	  Error_Handler();
+  }
 
   /* USER CODE END FDCAN2_Init 2 */
 

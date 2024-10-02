@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/freertos_init.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/freertos_init.c \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/sys.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/log.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/log.h \

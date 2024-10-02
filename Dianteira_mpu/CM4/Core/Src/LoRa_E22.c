@@ -1,30 +1,15 @@
 #include "LoRa_E22.h"
 #include "cmsis_os.h"
 
-#define LORA_CREATE_DEFAULT_CONFIG(NAME) E22_config NAME = {		\
-	.addr = 0x7272,													\
-	.netid = 0x27,													\
-	.channel = 0x07,												\
-	.crypt_key = 0x1324,											\
-	.bps = LORA_UART_9600,											\
-	.air_rate = LORA_AIR_2400,										\
-	.pkt_size = LORA_PACKET_240,									\
-	.rssi_read_en = LORA_RSSI_READ_DISABLE,							\
-	.pwr = LORA_POWER_22,											\
-	.rssi_en = LORA_RSSI_DISABLE,									\
-	.lbt_en = LORA_LBT_DISABLE,										\
-	.wor_ctrl = LORA_WOR_RX,										\
-	.wor_cycle = LORA_WOR_2000										\
-};
+
 
 HAL_StatusTypeDef lora_setmode(E22* module, LORA_MODE mode)
 {
-
 	LORA_MODE prevmode = module->mode;
 
 	if (prevmode != mode)
 	{
-		if(HAL_GPIO_ReadPin(module->GPIOx, module->aux) == RESET)
+		if (HAL_GPIO_ReadPin(module->GPIOx, module->aux) == RESET)
 		{
 			uint32_t starttim = osKernelGetTickCount();
 			uint32_t currtim = starttim;
@@ -76,8 +61,9 @@ HAL_StatusTypeDef lora_setmode(E22* module, LORA_MODE mode)
 HAL_StatusTypeDef lora_write_register(E22* module, LORA_REG reg, uint8_t* value, uint8_t len)
 {
 	LORA_MODE old_mode = module->mode;
-	lora_setmode(module, LORA_MODE_CONFIG);
-
+	if (module->mode != LORA_MODE_CONFIG) {
+		lora_setmode(module, LORA_MODE_CONFIG);
+	}
 	uint8_t cmd[3 + len];
 
 	cmd[0] = 0xC0;
@@ -110,6 +96,8 @@ HAL_StatusTypeDef lora_init(E22* module, E22_config* cfg, GPIO_TypeDef* GPIOX,
 	module->m1 = m1;
 	module->huart = huart;
 
+	lora_setmode(module, LORA_MODE_CONFIG);
+
 	lora_write_register(module, LORA_REG_ADDRESS, (uint8_t*) cfg->addr, sizeof(cfg->addr));
 	lora_write_register(module, LORA_REG_NETID, (uint8_t*) cfg->netid, sizeof(cfg->netid));
 	uint8_t temp_reg = cfg->air_rate | cfg->bps;	//serial parity at 00, dont mess with it
@@ -126,7 +114,8 @@ HAL_StatusTypeDef lora_init(E22* module, E22_config* cfg, GPIO_TypeDef* GPIOX,
 	lora_write_register(module, LORA_REG_CRYPTH, (uint8_t*) cfg->crypt_key, sizeof(cfg->crypt_key));
 
 	module->cfg = cfg;
-	//set to configuration mode
+
+	lora_setmode(module, LORA_MODE_NORMAL);
 
 
 

@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/condition.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/condition.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/condition.c \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/condition.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/mutex.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/mutex.h \

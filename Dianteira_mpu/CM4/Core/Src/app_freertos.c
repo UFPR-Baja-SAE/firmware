@@ -198,11 +198,10 @@ void StartTxCommsTask(void *argument)
 {
   /* USER CODE BEGIN StartTxCommsTask */
 	E22 lora;
-	E22_config lora_cfg;
+	LORA_CREATE_DEFAULT_CONFIG(lora_cfg);
 	msg_all msg;
 
 	VIRT_UART_HandleTypeDef vuart;
-
 	VIRT_UART_Init(&vuart);	//the max vuart message size is 512 bytes
 
 	lora_init(&lora, &lora_cfg, GPIOF, GPIO_PIN_4, GPIO_PIN_6, GPIO_PIN_3, &huart7);
@@ -210,9 +209,10 @@ void StartTxCommsTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  osMessageQueueGet(TxQueueHandle, &msg, NULL, osWaitForever);
 
-
-
+	  lora_write_message(&lora, (uint8_t*) &msg, msg.size);
+	  VIRT_UART_Transmit(&vuart, (uint8_t*) &msg, msg.size);
 
     osDelay(1);
 
@@ -235,24 +235,23 @@ void StartRxCommsTask(void *argument)
 
 	msg_all generic;
 
+
+
   /* Infinite loop */
 	for(;;)
 	{
 		osThreadFlagsWait(SIGNAL_CAN_RX, osFlagsWaitAny, osWaitForever);
 		HAL_FDCAN_GetRxMessage(&hfdcan2, FDCAN_RX_FIFO0, &head, rxdata);
 
-		if (head.Identifier != ERROR_MSG && head.Identifier != WARNING_MSG) {
-			generic.pdata = malloc(head.DataLength);
-			memcpy(generic.pdata, rxdata);
-			generic.type = head.Identifier;
-			generic.size = head.DataLength;
+		msg_unpack_can(&generic, &head, rxdata);
+		osMessageQueuePut(TxQueueHandle, &generic, NULL, 0);
 
-			osMessageQueuePut(TxQueueHandle, &generic, NULL, 0);
+		free(generic.pdata);
 
+		if (generic.type == MSG_ERROR || generic.type == MSG_WARNING) {
+			//TODO: make error handling stuffs and things but still send to linux for making logs
+			//TODO: setup txheader to be able to communicate via can
 		}
-		//TODO: make error handling stuffs and things
-
-
 
 		osDelay(1);
 	}

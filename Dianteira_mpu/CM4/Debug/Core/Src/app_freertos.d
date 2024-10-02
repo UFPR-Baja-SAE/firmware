@@ -79,8 +79,8 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
  ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h \
- /home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h \
- /home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h
+ /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h \
+ /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -164,5 +164,5 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h:
 ../OPENAMP/openamp_conf.h:
 ../OPENAMP/mbox_ipcc.h:
-/home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h:
-/home/lorolol/Baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h:
+/home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h:
+/home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h:

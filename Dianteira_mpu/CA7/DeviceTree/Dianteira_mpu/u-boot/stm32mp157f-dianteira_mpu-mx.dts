@@ -289,6 +289,12 @@
 		};
 	};
 
+	m4_tim5_pins_mx: m4_tim5_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('H', 11, RSVD)>; /* TIM5_CH2 */
+		};
+	};
+
 	m4_uart7_pins_mx: m4_uart7_mx-0 {
 		pins {
 			pinmux = <STM32_PINMUX('A', 8, RSVD)>, /* UART7_RX */
@@ -1109,6 +1115,22 @@
 
 	/* USER CODE BEGIN m4_m_can2 */
 	/* USER CODE END m4_m_can2 */
+};
+
+&m4_timers2{
+	status = "okay";
+
+	/* USER CODE BEGIN m4_timers2 */
+	/* USER CODE END m4_timers2 */
+};
+
+&m4_timers5{
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_tim5_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_timers5 */
+	/* USER CODE END m4_timers5 */
 };
 
 &m4_uart7{
