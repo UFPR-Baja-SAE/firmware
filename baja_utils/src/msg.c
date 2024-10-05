@@ -1,5 +1,10 @@
 #include "msg.h"
 
+#ifdef STM32F103
+#include "can.h"
+#else
+#include "fdcan.h"
+#endif
 
 void msg_create_generic(msg_all* out, size_t len, MSG_TYPES type, uint8_t* in) {
 	out->pdata = malloc(len);

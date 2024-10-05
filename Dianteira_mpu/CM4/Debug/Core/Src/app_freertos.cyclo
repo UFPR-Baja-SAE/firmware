@@ -2,4 +2,4 @@
 ../Core/Src/app_freertos.c:179:6:StartDefaultTask	1
 ../Core/Src/app_freertos.c:197:6:StartTxCommsTask	1
 ../Core/Src/app_freertos.c:230:6:StartRxCommsTask	1
-../Core/Src/app_freertos.c:267:6:StartSysInitTask	1
+../Core/Src/app_freertos.c:268:6:StartSysInitTask	1

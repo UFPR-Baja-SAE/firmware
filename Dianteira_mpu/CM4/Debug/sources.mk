@@ -29,5 +29,5 @@ Drivers/STM32MP1xx_HAL_Driver \
 Middlewares/Third_Party/FreeRTOS \
 Middlewares/Third_Party/OpenAMP \
 OPENAMP \
-baja_utils/src \
+src \
 

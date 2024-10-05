@@ -1,8 +1,6 @@
 #ifndef MSG_H
 #define MSG_H
-
-#include "fdcan.h"
-
+#include "main.h"
 typedef enum {
     MSG_RPM,
     MSG_VELOCITY,
@@ -10,7 +8,8 @@ typedef enum {
 	MSG_GPS,
     MSG_FUEL,
     MSG_WARNING,
-    MSG_ERROR
+    MSG_ERROR,
+    MSG_CONTROL
 } MSG_TYPES;
 
 typedef enum {
@@ -32,6 +31,8 @@ typedef enum {
     FREQ_20_HZ = 50,
     FREQ_40_HZ = 25,
     FREQ_100_HZ = 10,
+    FREQ_200_HZ = 5,
+    FREQ_500_HZ = 2,
     FREQ_REALTIME = 0
 } FREQ_VALUES;
 
@@ -48,6 +49,19 @@ typedef enum {
     WARNING_FUEL,
     WARNING_VELOCITY_HIGH,
 } WARNING_MSG;
+
+typedef enum {
+    CONTROL_RPM,
+    CONTROL_VELOCITY,
+    CONTROL_TEMPERATURE,
+    CONTROL_FUEL,
+    CONTROL_CAN
+} CONTROL_UNIT;
+
+typedef enum {
+    CONTROL_CHANGE_STATE,
+    CONTROL_CHANGE_FREQ
+} CONTROL_ACTION;
 
 typedef struct {
   MSG_TYPES type;
@@ -81,12 +95,22 @@ typedef struct {
 	uint32_t timestamp;
 } msg_error;
 
+typedef struct {
+    CONTROL_UNIT unit;
+    CONTROL_ACTION action;
+    uint8_t info
+} msg_control;
+
 
 void msg_create_generic(msg_all* out, size_t len, MSG_TYPES type, uint8_t* in);
 
+#ifdef STM32F103
+void msg_unpack_can(msg_all* gen, CAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata);
+void msg_pack_can(msg_all* gen, CAN_TxHeaderTypeDef* rxheader, uint8_t* rxdata);
+#else
 void msg_unpack_can(msg_all* gen, FDCAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata);
 void msg_pack_can(msg_all* gen, FDCAN_TxHeaderTypeDef* rxheader, uint8_t* rxdata);
-
+#endif
 void msg_pack_serial(msg_all* gen, uint8_t* data);
 
 #endif
