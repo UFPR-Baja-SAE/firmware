@@ -31,30 +31,21 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "msg.h"
 #include "signals.h"
+#include "cmsis_os2.h"
+#include "event_flags.h"
 /* USER CODE END Includes */
 
 extern CAN_HandleTypeDef hcan;
-
 /* USER CODE BEGIN Private defines */
 
-/*
-you HAVE to create different can_msg objects for each different message you send in a thread cycle,
-since "pdata" only gets freed after being used by the can_handler thread
-*/
-
-typedef struct {
-  MSG_TYPES type;
-  uint8_t size;
-  void* pdata;
-} can_msg;
 /* USER CODE END Private defines */
 
 void MX_CAN_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size);
 
-void can_send_message(const can_msg* pmsg);
+
+void can_send_message(msg_all* pmsg);
 
 /*
 what this function should be able to do:

@@ -61,6 +61,7 @@ extern IPCC_HandleTypeDef hipcc;
 extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart7;
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim5;
 
 /* USER CODE BEGIN EV */
 

@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/remoteproc_virtio.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/assert.h \

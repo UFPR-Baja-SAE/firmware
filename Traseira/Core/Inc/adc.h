@@ -58,10 +58,7 @@ typedef struct {
 void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void adc_read_values(adc_raw_values* raw);
-void adc_convert_values(adc_raw_values* raw, float* conv);
 
-void adc_create_msg(float* conv, can_msg* part1, can_msg* part2);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

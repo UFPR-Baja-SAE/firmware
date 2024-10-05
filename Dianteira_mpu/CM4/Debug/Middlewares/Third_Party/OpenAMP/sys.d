@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/sys.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/template/sys.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/freertos/template/sys.c \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/assert.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/assert.h \

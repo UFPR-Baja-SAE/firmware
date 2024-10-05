@@ -48,9 +48,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
-
-
+extern uint16_t frequency[5];
+extern uint8_t unit_state[5];
 
 extern uint32_t rpm_itr[RPM_SAMPLES];
 
@@ -60,8 +59,6 @@ extern uint32_t txmailbox;
 
 extern CAN_RxHeaderTypeDef rxheader;
 extern uint8_t* rxdata;
-
-extern uint32_t polling_delay, itr_delay, comms_delay;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -139,7 +136,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of CAN_Q */
-  CAN_QHandle = osMessageQueueNew (8, sizeof(can_msg), &CAN_Q_attributes);
+  CAN_QHandle = osMessageQueueNew (8, sizeof(msg_all), &CAN_Q_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -187,10 +184,31 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+    osThreadFlagsWait(0XFFFF, osFlagsWaitAny, osWaitForever);
 
+    //kill threads where all units are stopped, create threads where a unit has been restarted
+    osThreadState_t tstate = osThreadGetState(Itr_handlerHandle);
+    if (osThreadFlagsGet() == CONTROL_FLAG) {
+      if ((unit_state[CONTROL_RPM] | unit_state[CONTROL_VELOCITY]) == 0) {
+        if (tstate == 4)break;
+        else osThreadTerminate(Itr_handlerHandle);
+      } 
+      
+      else if (tstate == 4) {
+        osThreadNew(Start_Itr_handler, NULL, &Itr_handler_attributes);
+      }
 
-    osDelay(30);
+      tstate = osThreadGetState(Polling_handlerHandle);
+      if ((unit_state[CONTROL_FUEL] | unit_state[CONTROL_TEMPERATURE]) == 0) {
+        if (tstate == 4) break;
+        else osThreadTerminate(Polling_handlerHandle);
+      }
+
+      else if (tstate == 4) {
+        osThreadNew(Start_Polling_handler, NULL, &Polling_handler_attributes);
+      }
+    }
+    osDelay(10);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -205,8 +223,8 @@ void StartDefaultTask(void *argument)
 void Start_CAN_handler(void *argument)
 {
   /* USER CODE BEGIN Start_CAN_handler */
-  can_msg *msg;
-  msg = malloc(sizeof(can_msg));
+  msg_all msg;
+
   /* Infinite loop */
   for(;;)
   {
@@ -216,35 +234,27 @@ void Start_CAN_handler(void *argument)
 
       osMessageQueueReset(CAN_QHandle);
       ERROR_MSG err = ERROR_CAN_QUEUE_FULL;
-      can_setup_message(msg, MSG_ERROR, &err, 1);
-      can_send_message(msg);
+      can_setup_message(&msg, MSG_ERROR, &err, 1);
+      can_send_message(&msg);
     }
 
-    if (osMessageQueueGet(CAN_QHandle, msg, NULL, osWaitForever) == osOK) {
+    if (osMessageQueueGet(CAN_QHandle, &msg, NULL, osWaitForever) == osOK) {
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
-      can_send_message(msg);
-      free(msg->pdata);
+      can_send_message(&msg);
+      free(msg.pdata);
       osDelay(1);
     }
 
     /*
     todo: find a way of not using global variables for this (maybe have 2 different mutexes or whatever)
+    probably best to just use global variables and fuck it
     */
 
     if (osThreadFlagsGet() == SIGNAL_CAN_RX) {
       //Handle the message
-      switch (rxheader.StdId) {
-        case FREQ_ITR:
-          itr_delay = (uint32_t)* rxdata;
-          break;
-        case FREQ_POLLING:
-          polling_delay = (uint32_t)* rxdata;
-          break;
-        case FREQ_COMMS:
-          comms_delay = (uint32_t)* rxdata;
-      }
+      can_handle_rx_msg();
     }
-    osDelay(comms_delay);
+    osDelay(frequency[CONTROL_CAN]);
   }
   /* USER CODE END Start_CAN_handler */
 }
@@ -259,7 +269,7 @@ void Start_CAN_handler(void *argument)
 void Start_Itr_handler(void *argument)
 {
   /* USER CODE BEGIN Start_Itr_handler */
-  can_msg msg;
+  msg_all msg;
   msg_rpm data;
   
   /* Infinite loop */
@@ -275,7 +285,24 @@ void Start_Itr_handler(void *argument)
 
     osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
 
-    osDelay(itr_delay);
+    osDelay(frequency[CONTROL_RPM]);
+
+    //TODO: have to add speed data from phonic wheel if that eventually works
+    /*
+    timing will work something like this:
+    int a = gettick()
+    if (a + frequency.rpm > gettick()) {
+    osDelay(1);
+    } else {
+      ...rpm code...
+    }
+
+    int b = gettick()
+    if(b + frequency.spd > gettick())
+    same shit again
+
+    I think this should work
+    */
 
   }
   /* USER CODE END Start_Itr_handler */
@@ -291,36 +318,14 @@ void Start_Itr_handler(void *argument)
 void Start_Polling_handler(void *argument)
 {
   /* USER CODE BEGIN Start_Polling_handler */
-  float values[4];
-  adc_raw_values raw_vals;
-  can_msg msg_can;
 
-
-  msg_adc padc1;
-  msg_adc padc2;
-
+  msg_all msg_can;
   msg_tempcvt cvt;
 
   uint16_t raw_temp_cvt;
   /* Infinite loop */
   for(;;)
   {
-    adc_read_values(&raw_vals);
-    adc_convert_values(&raw_vals, values);
-
-    //adc_create_msg(values, &p1, &p2);   eventually fix this shit
-
-    padc1.val1 = values[0];
-    padc1.val2 = values[1];
-    padc2.val1 = values[2];
-    padc2.val2 = values[3];
-
-    can_setup_message(&msg_can, MSG_ADC1, &padc1, sizeof(msg_adc));
-    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
-
-    can_setup_message(&msg_can, MSG_ADC2, &padc2, sizeof(msg_adc));
-    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
-
     raw_temp_cvt = temp_read();
 
     cvt.temp = temp_convert(raw_temp_cvt);
@@ -329,7 +334,9 @@ void Start_Polling_handler(void *argument)
     can_setup_message(&msg_can, MSG_TEMPERATURE, &cvt, sizeof(msg_tempcvt));
     osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
 
-    osDelay(polling_delay);
+    osDelay(frequency[CONTROL_TEMPERATURE]);
+
+    //have to do the same thing here as i have to do in the other task
     
   }
   /* USER CODE END Start_Polling_handler */

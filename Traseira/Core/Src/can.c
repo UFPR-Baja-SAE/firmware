@@ -21,6 +21,11 @@
 #include "can.h"
 
 /* USER CODE BEGIN 0 */
+extern uint16_t frequency[5];
+extern uint8_t unit_state[5];
+
+extern osThreadId_t defaultTaskHandle;
+
 CAN_TxHeaderTypeDef txheader;
 CAN_FilterTypeDef can_filter;
 uint32_t txmailbox;
@@ -148,7 +153,9 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 /*
 
 */
-void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size) {
+
+//deprecated, use msg_pack_can
+void can_setup_message(msg_all* pmsg, MSG_TYPES type, void* pdata, uint16_t size) {
   pmsg->type = type;
   pmsg->size = size;
   pmsg->pdata = malloc(size);
@@ -157,10 +164,27 @@ void can_setup_message(can_msg* pmsg, MSG_TYPES type, void* pdata, uint16_t size
 
 }
 
-void can_send_message(const can_msg* pmsg) {
+void can_send_message(msg_all* pmsg) {
   txheader.StdId = pmsg->type;
   txheader.DLC = pmsg->size;
   HAL_CAN_AddTxMessage(&hcan, &txheader, (uint8_t*)pmsg->pdata, &txmailbox);
+}
+
+void can_handle_rx_msg(msg_control* in) {
+  FREQ_VALUES t;
+  if (in->action == CONTROL_CHANGE_FREQ) {
+    t = in->info;
+    if (t < 2000 && t >= 0) {
+      frequency[in->unit] = t;
+    }
+  }
+
+  if (in->action == CONTROL_CHANGE_STATE) {
+    uint8_t state = in->info;
+    if (state > 1) state = 1;
+    unit_state[in->unit] = state;
+    osThreadFlagsSet(defaultTaskHandle, CONTROL_FLAG);
+  }
 }
 
 /* USER CODE END 1 */

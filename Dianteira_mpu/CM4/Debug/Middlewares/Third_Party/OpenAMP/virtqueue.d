@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/virtqueue.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtio.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtqueue.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtio_ring.h \
