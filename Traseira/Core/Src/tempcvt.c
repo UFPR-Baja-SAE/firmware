@@ -10,7 +10,7 @@ uint16_t temp_read() {
   return raw;
 }
 
-float temp_convert(uint16_t raw) {
+uint32_t temp_convert(uint16_t raw) {
   float convert;
   uint16_t tmp;
 
@@ -19,5 +19,5 @@ float temp_convert(uint16_t raw) {
 
   convert = TEMP_RAW_TO_REAL * tmp;
   
-  return convert;
+  return (uint32_t) (convert * 1000);
 }

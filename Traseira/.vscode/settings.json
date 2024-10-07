@@ -61,5 +61,6 @@
   "files.associations": {
     "can.h": "c",
     "msg.h": "c"
-  }
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }

@@ -233,8 +233,10 @@ void Start_CAN_handler(void *argument)
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, SET);
 
       osMessageQueueReset(CAN_QHandle);
-      ERROR_MSG err = ERROR_CAN_QUEUE_FULL;
-      can_setup_message(&msg, MSG_ERROR, &err, 1);
+      msg_error err;
+      err.code = ERROR_CAN_QUEUE_FULL;
+      err.timestamp = osKernelGetTickCount();
+      msg_create_generic(&msg, MSG_ERROR, sizeof(msg_error), &err);
       can_send_message(&msg);
     }
 
@@ -271,39 +273,68 @@ void Start_Itr_handler(void *argument)
   /* USER CODE BEGIN Start_Itr_handler */
   msg_all msg;
   msg_rpm data;
+  msg_warning warn;
+  msg_error err;
+
+  uint32_t last_rpm = 0;
+  uint32_t last_vel = 0;
+
+  uint8_t strikes_rpm = 0;
+  uint8_t strikes_vel = 0;
   
   /* Infinite loop */
   for(;;)
   {
-    osEventFlagsWait(itr_eventsHandle, ITR_RPM_FLAG, osFlagsWaitAny, osWaitForever);
+    osEventFlagsWait(itr_eventsHandle, 0xFFFF, osFlagsWaitAny, osWaitForever);
 
-    data.rpm = rpm_calculate(rpm_itr);
-    data.timestamp = osKernelGetTickCount();
+    if (((osEventFlagsGet(itr_eventsHandle) & ITR_RPM_FLAG) == ITR_RPM_FLAG) && unit_state[CONTROL_RPM] == 1) {
+      if (last_rpm + frequency[CONTROL_RPM] < osKernelGetTickCount()) {
+        uint32_t ts = osKernelGetTickCount();
+        data.rpm = rpm_calculate(rpm_itr);
+        if (data.rpm == -1) {
+          strikes_rpm++;
+
+          warn.code = WARNING_RPM_DEBOUNCE;
+          warn.timestamp = ts;
+
+          msg_create_generic(&msg, sizeof(msg_warning), MSG_WARNING, &warn);
+          osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
+
+          free(msg.pdata);
+          if (strikes_rpm >= 3) {
+            strikes_rpm = 0;
+            
+            err.code = ERROR_FAULTY_RPM;
+            err.timestamp = osKernelGetTickCount();
+
+            msg_create_generic(&msg, sizeof(msg_error), MSG_ERROR, &err);
+            osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
+
+            free(msg.pdata);
+          }
+          break;
+        }
+        data.timestamp = ts;
     
-    can_setup_message(&msg, MSG_RPM, &data, sizeof(float));
-    osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
-
-    osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
-
-    osDelay(frequency[CONTROL_RPM]);
-
-    //TODO: have to add speed data from phonic wheel if that eventually works
-    /*
-    timing will work something like this:
-    int a = gettick()
-    if (a + frequency.rpm > gettick()) {
-    osDelay(1);
-    } else {
-      ...rpm code...
+        msg_create_generic(&msg, MSG_RPM, sizeof(float), &data);
+        osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
+    
+        osEventFlagsClear(itr_eventsHandle, ITR_RPM_FLAG);
+        last_rpm = osKernelGetTickCount();
+      }
     }
 
-    int b = gettick()
-    if(b + frequency.spd > gettick())
-    same shit again
-
-    I think this should work
-    */
-
+    if (((osEventFlagsGet(itr_eventsHandle) & ITR_VEL_FLAG) == ITR_VEL_FLAG) 
+          && unit_state[CONTROL_VELOCITY]) {
+      if (last_vel + frequency[CONTROL_VELOCITY] < osKernelGetTickCount()) {
+      //TODO: speed calculations
+      //there probably isn't going to be any speed data on the car, but it shouldn't be hard to do 
+      //if we manage to get it working
+      //plus do all the error handling, same as rpm
+      osEventFlagsClear(itr_eventsHandle, ITR_VEL_FLAG);
+      last_vel = osKernelGetTickCount();
+      }
+    }
   }
   /* USER CODE END Start_Itr_handler */
 }
@@ -319,22 +350,78 @@ void Start_Polling_handler(void *argument)
 {
   /* USER CODE BEGIN Start_Polling_handler */
 
-  msg_all msg_can;
+  msg_all msg;
   msg_tempcvt cvt;
+  msg_fuel fuel;
+
+  msg_error err;
+  msg_warning warn;
+
+  uint8_t strike_fuel;
+  uint8_t strike_temp;
 
   uint16_t raw_temp_cvt;
+
+  uint32_t last_temp = 0;
+  uint32_t last_fuel = 0;
   /* Infinite loop */
   for(;;)
   {
-    raw_temp_cvt = temp_read();
+    if ((last_temp + frequency[CONTROL_TEMPERATURE] < osKernelGetTickCount()) 
+        && unit_state[CONTROL_TEMPERATURE] == 1) {
+      uint8_t is_warn = 0;
+      uint8_t is_err = 0;
+      uint32_t ts = osKernelGetTickCount();
+      if (strike_fuel >= 3) {
+        is_err = 1;
+        err.code = ERROR_FAULTY_TEMP;
+        err.timestamp = ts;
+      }
+      
+      raw_temp_cvt = temp_read();
 
-    cvt.temp = temp_convert(raw_temp_cvt);
-    cvt.timestamp = osKernelGetTickCount();
+      if (raw_temp_cvt == -1) {
+        strike_temp++;
+        is_warn = 1;
 
-    can_setup_message(&msg_can, MSG_TEMPERATURE, &cvt, sizeof(msg_tempcvt));
-    osMessageQueuePut(CAN_QHandle, &msg_can, NULL, 0);
+        warn.code = WARNING_TEMP_SPI;
+        warn.timestamp = ts;
+      } else {
+        cvt.temp = temp_convert(raw_temp_cvt);
 
-    osDelay(frequency[CONTROL_TEMPERATURE]);
+        if (cvt.temp < 10000) {
+          strike_temp++;
+          is_warn = 1;
+
+          warn.code = WARNING_TEMP_FAULTY;
+          warn.timestamp = ts;
+        } else
+        if (cvt.temp > 100000) {
+          is_warn = 1;
+          warn.timestamp = ts;
+          if (cvt.temp > 150000) {
+            strike_temp++;
+          
+            warn.code = WARNING_TEMP_FAULTY;
+          } else {
+            warn.code = WARNING_TEMP_HIGH;
+          }
+        }
+      }
+      if (is_err) {
+        msg_create_generic(&msg, sizeof(msg_error), MSG_ERROR, &err);
+        osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
+      } else
+      if (is_warn) {
+        msg_create_generic(&msg, sizeof(msg_warning), MSG_WARNING, &warn);
+        osMessageQueuePut(CAN_QHandle, &msg, NULL, 0);
+      }
+
+    }
+
+    if (last_fuel + frequency[CONTROL_FUEL] < osKernelGetTickCount()) {
+      //do the fuel polling, really easy, but also don't know if this will work at the end of the day
+    }
 
     //have to do the same thing here as i have to do in the other task
     

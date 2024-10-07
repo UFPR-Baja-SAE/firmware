@@ -1,6 +1,5 @@
 src/msg.o: /home/lorolol/Baja/firmware/baja_utils/src/msg.c \
- /home/lorolol/Baja/firmware/baja_utils/inc/msg.h ../Core/Inc/fdcan.h \
- ../Core/Inc/main.h \
+ /home/lorolol/Baja/firmware/baja_utils/inc/msg.h ../Core/Inc/main.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h \
  ../Core/Inc/stm32mp1xx_hal_conf.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h \
@@ -31,9 +30,9 @@ src/msg.o: /home/lorolol/Baja/firmware/baja_utils/src/msg.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h \
- ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h \
+ ../Core/Inc/fdcan.h ../Core/Inc/main.h
 /home/lorolol/Baja/firmware/baja_utils/inc/msg.h:
-../Core/Inc/fdcan.h:
 ../Core/Inc/main.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
@@ -66,3 +65,5 @@ src/msg.o: /home/lorolol/Baja/firmware/baja_utils/src/msg.c \
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h:
+../Core/Inc/fdcan.h:
+../Core/Inc/main.h:

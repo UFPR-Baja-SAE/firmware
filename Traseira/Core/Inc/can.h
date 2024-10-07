@@ -43,8 +43,6 @@ extern CAN_HandleTypeDef hcan;
 void MX_CAN_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
-
 void can_send_message(msg_all* pmsg);
 
 /*
