@@ -79,7 +79,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h \
  ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
+<<<<<<< HEAD
  /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h
+=======
+ /home/lorolol/Baja/firmware/baja_utils/inc/signals.h
+>>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852
 ../Core/Inc/main.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
@@ -168,4 +172,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:
 ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
+<<<<<<< HEAD
 /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/signals.h:
+=======
+/home/lorolol/Baja/firmware/baja_utils/inc/signals.h:
+>>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852

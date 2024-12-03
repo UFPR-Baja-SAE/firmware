@@ -1,5 +1,12 @@
 ../Core/Src/app_freertos.c:117:6:MX_FREERTOS_Init	1
+<<<<<<< HEAD
 ../Core/Src/app_freertos.c:179:6:StartDefaultTask	5
 ../Core/Src/app_freertos.c:246:6:StartTxCommsTask	1
 ../Core/Src/app_freertos.c:279:6:StartRxCommsTask	1
 ../Core/Src/app_freertos.c:316:6:StartSysInitTask	1
+=======
+../Core/Src/app_freertos.c:179:6:StartDefaultTask	1
+../Core/Src/app_freertos.c:197:6:StartTxCommsTask	1
+../Core/Src/app_freertos.c:230:6:StartRxCommsTask	1
+../Core/Src/app_freertos.c:268:6:StartSysInitTask	1
+>>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852

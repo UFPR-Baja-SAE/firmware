@@ -1,4 +1,3 @@
-#include "msg_types.h"
 #include "stdint.h"
 #include "event_flags.h"
 

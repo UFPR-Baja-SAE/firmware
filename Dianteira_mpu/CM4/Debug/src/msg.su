@@ -1,0 +1,4 @@
+/home/lorolol/Baja/firmware/baja_utils/src/msg.c:9:6:msg_create_generic	24	static
+/home/lorolol/Baja/firmware/baja_utils/src/msg.c:22:6:msg_unpack_can	24	static
+/home/lorolol/Baja/firmware/baja_utils/src/msg.c:30:6:msg_pack_can	24	static
+/home/lorolol/Baja/firmware/baja_utils/src/msg.c:37:6:msg_pack_serial	16	static

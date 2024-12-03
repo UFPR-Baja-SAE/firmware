@@ -77,6 +77,7 @@ includeDirectories:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
+  - baja_utils/inc/**
 
 
 # Files that should be included in the compilation.
@@ -88,6 +89,7 @@ sourceFiles:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
+  - baja_utils/src/**
 
 
 # When no makefile is present it will show a warning pop-up.

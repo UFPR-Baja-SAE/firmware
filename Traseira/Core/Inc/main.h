@@ -26,16 +26,20 @@
 extern "C" {
 #endif
 
+#define STM32F103
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdlib.h"
+#include "msg.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
 
 /* USER CODE END ET */
 

@@ -16,6 +16,8 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
@@ -37,6 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,17 +50,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint16_t frequency[5];
+uint8_t unit_state[5];
+
 uint32_t rpm_itr[RPM_SAMPLES];
 uint8_t rpm_counter;
 uint32_t rpm_last_itr;
 uint32_t rpm_curr_itr;
 
-uint32_t polling_delay, itr_delay, comms_delay;
-
-
 extern CAN_RxHeaderTypeDef rxheader;
 extern uint8_t* rxdata;
 
+extern osThreadId_t defaultTaskHandle;
 extern osThreadId_t CAN_handlerHandle;
 extern osEventFlagsId_t itr_eventsHandle;
 /* USER CODE END PV */
@@ -65,6 +69,11 @@ extern osEventFlagsId_t itr_eventsHandle;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
+
+void control_change_freq(CONTROL_UNIT unit, uint16_t freq);
+
+void control_change_state(CONTROL_UNIT unit, uint8_t bool);
+
 /* USER CODE BEGIN PFP */
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
@@ -101,9 +110,11 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  polling_delay = FREQ_4_HZ;
-  comms_delay = FREQ_20_HZ;
-  itr_delay = FREQ_REALTIME;
+  frequency[CONTROL_CAN] = FREQ_REALTIME;
+  frequency[CONTROL_RPM] = FREQ_100_HZ;
+  frequency[CONTROL_VELOCITY] = FREQ_100_HZ;
+  frequency[CONTROL_TEMPERATURE] = FREQ_4_HZ;
+  frequency[CONTROL_FUEL] = FREQ_4_HZ;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -200,7 +211,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void control_change_freq(CONTROL_UNIT unit, uint16_t freq) {
+  if (freq < 2000) {        //hardcap at 2 seconds to prevent fuck ups
+    frequency[unit] = freq;
+  }
+}
 
+void control_change_state(CONTROL_UNIT unit, uint8_t bool) {
+  uint8_t state;  
+  if (bool > 1) state = 1;
+  else state = 0;
+  unit_state[unit] = state;
+
+  osThreadFlagsSet(defaultTaskHandle, CONTROL_FLAG);
+}
 /* USER CODE END 4 */
 
 /**

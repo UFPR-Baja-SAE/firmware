@@ -1,5 +1,5 @@
 Middlewares/Third_Party/OpenAMP/rpmsg_virtio.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/alloc.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/alloc.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
@@ -43,7 +43,7 @@ Middlewares/Third_Party/OpenAMP/rpmsg_virtio.o: \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtqueue.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtio_ring.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/spinlock.h \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/alloc.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/freertos/alloc.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
@@ -87,4 +87,4 @@ Middlewares/Third_Party/OpenAMP/rpmsg_virtio.o: \
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtqueue.h:
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtio_ring.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/spinlock.h:
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h:
+/home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_internal.h:

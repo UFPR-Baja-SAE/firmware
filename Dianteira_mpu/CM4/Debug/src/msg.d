@@ -1,5 +1,10 @@
+<<<<<<< HEAD:Dianteira_mpu/CM4/Debug/baja_utils/src/msg.d
 baja_utils/src/msg.o: ../baja_utils/src/msg.c \
  /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h \
+=======
+src/msg.o: /home/lorolol/Baja/firmware/baja_utils/src/msg.c \
+ /home/lorolol/Baja/firmware/baja_utils/inc/msg.h ../Core/Inc/main.h \
+>>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852:Dianteira_mpu/CM4/Debug/src/msg.d
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h \
  ../Core/Inc/stm32mp1xx_hal_conf.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h \
@@ -30,8 +35,15 @@ baja_utils/src/msg.o: ../baja_utils/src/msg.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h \
+<<<<<<< HEAD:Dianteira_mpu/CM4/Debug/baja_utils/src/msg.d
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h
 /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h:
+=======
+ ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h \
+ ../Core/Inc/fdcan.h ../Core/Inc/main.h
+/home/lorolol/Baja/firmware/baja_utils/inc/msg.h:
+../Core/Inc/main.h:
+>>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852:Dianteira_mpu/CM4/Debug/src/msg.d
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h:
@@ -63,3 +75,5 @@ baja_utils/src/msg.o: ../baja_utils/src/msg.c \
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h:
+../Core/Inc/fdcan.h:
+../Core/Inc/main.h:

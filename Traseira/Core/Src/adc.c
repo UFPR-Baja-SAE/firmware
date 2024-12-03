@@ -152,40 +152,4 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void adc_read_values(adc_raw_values* raw) {
-  for (int i = 0; i < 4; i++) {
-    HAL_ADC_Start(&hadc1);
-    HAL_ADC_PollForConversion(&hadc1, 1);
-    ((uint16_t*)raw)[i] = HAL_ADC_GetValue(&hadc1);
-  }
-}
-void adc_convert_values(adc_raw_values* raw, float* conv) {
-  conv[ADC_BAT] = (raw->bat * 3.3 * 4) / 4095;
-
-  //todo: test all the other adc sources and calculate the conversions
-  //the fuel sensor will not be installed for a while so we have to wait on that
-  //meanwhile just pass the raw values as floats for testing's sake
-
-  conv[ADC_FREIOT] = raw->freioT;
-  conv[ADC_FREIOD] = raw->freioD;
-  conv[ADC_COMB] = raw->comb;
-}
-
-/*
-Have to make 2 messages for this since CAN can only send 8 bytes per message
-*/
-
-void adc_create_msg(float* conv, can_msg* part1, can_msg* part2) {
-  float fp1[2];
-  fp1[0] = conv[0];
-  fp1[1] = conv[1];
-
-  can_setup_message(part1, MSG_ADC1, &fp1, 2 * sizeof(float));
-
-  float fp2[2];
-  fp2[0] = conv[2];
-  fp2[1] = conv[3];
-
-  can_setup_message(part2, MSG_ADC2, &fp2, 2 * sizeof(float));
-}
 /* USER CODE END 1 */

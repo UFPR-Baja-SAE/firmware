@@ -146,3 +146,5 @@ void msg_pack_serial(msg_all* in, uint8_t* out);
 void msg_unpack_serial(msg_all* out, uint8_t* in);
 
 #endif
+void msg_pack_serial(msg_all* gen, uint8_t* data);
+#endif

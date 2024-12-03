@@ -1,5 +1,5 @@
 Middlewares/Third_Party/FreeRTOS/queue.o: \
- /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/queue.c \
+ /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/queue.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \

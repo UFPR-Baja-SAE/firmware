@@ -18,7 +18,6 @@
     {
       "name": "STM32",
       "includePath": [
-        "../baja_utils/inc",
         "Core/Inc",
         "Drivers/CMSIS/Device/ST/STM32F1xx/Include",
         "Drivers/CMSIS/Include",
@@ -26,7 +25,8 @@
         "Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
         "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
         "Middlewares/Third_Party/FreeRTOS/Source/include",
-        "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"
+        "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3",
+        "baja_utils/inc"
       ],
       "defines": [
         "STM32F103xB",
