@@ -13,4 +13,6 @@
 		<item key="DIALOG_HEIGHT" value="666"/>
 		<item key="DIALOG_FONT_NAME" value="1|Mononoki Nerd Font Mono|10.0|0|GTK|1|"/>
 	</section>
+	<section name="FileSystemImportWizard">
+	</section>
 </section>

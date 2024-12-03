@@ -2,10 +2,8 @@
 
 
 void msg_create_generic(msg_all* out, size_t len, MSG_TYPES type, uint8_t* in) {
-	out->pdata = malloc(len);
 	out->type = type;
 	out->size = len;
-
 	memcpy(out->pdata, in, len);
 }
 
@@ -15,11 +13,10 @@ void msg_create_generic(msg_all* out, size_t len, MSG_TYPES type, uint8_t* in) {
  */
 
 void msg_unpack_can(msg_all* gen, FDCAN_RxHeaderTypeDef* rxheader, uint8_t* rxdata) {
-	gen->pdata = malloc(rxheader->DataLength);
 	memcpy(gen->pdata, rxdata, gen->size);
 
 	gen->type = rxheader->Identifier;
-	gen->size = rxheader->DataLength;
+	gen->size = 8;				//TODO: switch statement for each msg type since dlc gets corrupted for some reason
 }
 
 void msg_pack_can(msg_all* gen, FDCAN_TxHeaderTypeDef* rxheader, uint8_t* txdata) {
