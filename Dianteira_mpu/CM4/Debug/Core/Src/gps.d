@@ -1,5 +1,5 @@
-baja_utils/src/msg.o: ../baja_utils/src/msg.c \
- /home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h \
+Core/Src/gps.o: ../Core/Src/gps.c ../Core/Inc/gps.h ../Core/Inc/tim.h \
+ ../Core/Inc/main.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h \
  ../Core/Inc/stm32mp1xx_hal_conf.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h \
@@ -31,7 +31,9 @@ baja_utils/src/msg.o: ../baja_utils/src/msg.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h
-/home/pauli/baja/firmware/Dianteira_mpu/CM4/baja_utils/inc/msg.h:
+../Core/Inc/gps.h:
+../Core/Inc/tim.h:
+../Core/Inc/main.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_rcc.h:

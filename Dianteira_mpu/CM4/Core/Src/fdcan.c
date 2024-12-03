@@ -38,7 +38,7 @@ void MX_FDCAN2_Init(void)
 	filter.FilterType = FDCAN_FILTER_RANGE;
 	filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
 	filter.FilterID1 = 0;
-	filter.FilterID2 = 0x7FF;				//TODO: test if this works with the current setup
+	filter.FilterID2 = 0x7FF;
   /* USER CODE END FDCAN2_Init 0 */
 
   /* USER CODE BEGIN FDCAN2_Init 1 */
@@ -46,7 +46,7 @@ void MX_FDCAN2_Init(void)
   /* USER CODE END FDCAN2_Init 1 */
   hfdcan2.Instance = FDCAN2;
   hfdcan2.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
-  hfdcan2.Init.Mode = FDCAN_MODE_NORMAL;
+  hfdcan2.Init.Mode = FDCAN_MODE_INTERNAL_LOOPBACK;
   hfdcan2.Init.AutoRetransmission = DISABLE;
   hfdcan2.Init.TransmitPause = DISABLE;
   hfdcan2.Init.ProtocolException = DISABLE;
@@ -69,7 +69,7 @@ void MX_FDCAN2_Init(void)
   hfdcan2.Init.RxBufferSize = FDCAN_DATA_BYTES_8;
   hfdcan2.Init.TxEventsNbr = 0;
   hfdcan2.Init.TxBuffersNbr = 0;
-  hfdcan2.Init.TxFifoQueueElmtsNbr = 0;
+  hfdcan2.Init.TxFifoQueueElmtsNbr = 1;
   hfdcan2.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
   hfdcan2.Init.TxElmtSize = FDCAN_DATA_BYTES_8;
   if (HAL_FDCAN_Init(&hfdcan2) != HAL_OK)
@@ -77,8 +77,16 @@ void MX_FDCAN2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN FDCAN2_Init 2 */
+  if (HAL_FDCAN_ConfigFilter(&hfdcan2, &filter) != HAL_OK) {
+  	Error_Handler();
+  }
+
   if (HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, NULL) != HAL_OK) {
 	  Error_Handler();
+  }
+
+  if (HAL_FDCAN_Start(&hfdcan2) != HAL_OK) {
+  	Error_Handler();
   }
 
   /* USER CODE END FDCAN2_Init 2 */

@@ -1,4 +1,4 @@
 ../baja_utils/src/msg.c:4:6:msg_create_generic	1
-../baja_utils/src/msg.c:17:6:msg_unpack_can	1
-../baja_utils/src/msg.c:25:6:msg_pack_can	1
-../baja_utils/src/msg.c:32:6:msg_pack_serial	1
+../baja_utils/src/msg.c:15:6:msg_unpack_can	1
+../baja_utils/src/msg.c:22:6:msg_pack_can	1
+../baja_utils/src/msg.c:29:6:msg_pack_serial	1

@@ -179,10 +179,59 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+	FDCAN_TxHeaderTypeDef txhead;
+	msg_all msg;
+	msg_vel spd;
+	msg_rpm rpm;
+	msg_tempcvt temp;
+	msg_fuel fuel;
+	uint8_t i;
+	uint8_t pdata[8];
+
+	txhead.BitRateSwitch = FDCAN_BRS_OFF;
+	txhead.DataLength = FDCAN_DLC_BYTES_8;
+	txhead.ErrorStateIndicator = FDCAN_ESI_PASSIVE;
+	txhead.FDFormat = FDCAN_CLASSIC_CAN;
+	txhead.IdType = FDCAN_STANDARD_ID;
+	txhead.TxFrameType = FDCAN_DATA_FRAME;
+	txhead.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+  	switch (i%4) {
+  	case 0:
+  		spd.spd += 1000;
+  		spd.timestamp = osKernelGetTickCount();
+  		msg_create_generic(&msg, sizeof(msg_vel), MSG_VELOCITY, (uint8_t*)&spd);
+  		msg_pack_can(&msg, &txhead, pdata);
+  		break;
+
+  	case 1:
+  		rpm.rpm += 100;
+  		rpm.timestamp = osKernelGetTickCount();
+  		msg_create_generic(&msg, sizeof(msg_rpm), MSG_RPM, (uint8_t*)&rpm);
+  		msg_pack_can(&msg, &txhead, pdata);
+  		break;
+
+  	case 2:
+  		temp.temp += 1000;
+  		temp.timestamp = osKernelGetTickCount();
+  		msg_create_generic(&msg, sizeof(msg_tempcvt), MSG_TEMPERATURE, (uint8_t*)&temp);
+  		msg_pack_can(&msg, &txhead, pdata);
+  		break;
+
+  	case 3:
+  		fuel.fuel += 1;
+  		fuel.timestamp = osKernelGetTickCount();
+  		msg_create_generic(&msg, sizeof(msg_fuel), MSG_FUEL, (uint8_t*)&fuel);
+  		msg_pack_can(&msg, &txhead, pdata);
+  		break;
+  	}
+
+  	HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &txhead, pdata);
+  	i++;
+
+    osDelay(20);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -202,7 +251,7 @@ void StartTxCommsTask(void *argument)
 	msg_all msg;
 
 	VIRT_UART_HandleTypeDef vuart;
-	VIRT_UART_Init(&vuart);	//the max vuart message size is 512 bytes
+	VIRT_UART_Init(&vuart);	//the max vuart message size is 512 - 16 bytes
 
 	lora_init(&lora, &lora_cfg, GPIOF, GPIO_PIN_4, GPIO_PIN_6, GPIO_PIN_3, &huart7);
 
@@ -246,7 +295,6 @@ void StartRxCommsTask(void *argument)
 		msg_unpack_can(&generic, &head, rxdata);
 		osMessageQueuePut(TxQueueHandle, &generic, NULL, 0);
 
-		free(generic.pdata);
 
 		if (generic.type == MSG_ERROR || generic.type == MSG_WARNING) {
 			//TODO: make error handling stuffs and things but still send to linux for making logs
