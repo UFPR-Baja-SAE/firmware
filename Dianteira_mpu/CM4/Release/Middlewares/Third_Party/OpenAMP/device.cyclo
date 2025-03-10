@@ -1,9 +1,0 @@
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:98:5:metal_generic_dev_open	3
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:117:5:metal_generic_dev_dma_map	4
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:140:6:metal_generic_dev_dma_unmap	2
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:30:5:metal_bus_unregister	4
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:39:5:metal_bus_find	4
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:18:5:metal_bus_register	7
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:54:5:metal_device_open	8
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:79:6:metal_device_close	3
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:86:5:metal_register_generic_device	4

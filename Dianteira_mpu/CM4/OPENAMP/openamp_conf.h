@@ -7,7 +7,7 @@
   ******************************************************************************
     * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -57,7 +57,7 @@
    * @brief This is the list of modules to be used in the OpenAMP Virtual driver module
    *        Please note that virtual driver are not supported on all stm32 families
    */
-//#define VIRTUAL_UART_MODULE_ENABLED
+#define VIRTUAL_UART_MODULE_ENABLED
 //#define VIRTUAL_I2C_MODULE_ENABLED
 
  /* Includes ------------------------------------------------------------------*/

@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (12.3.rel1)
+# Toolchain: GNU Tools for STM32 (13.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -9,12 +9,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/subdir.mk
 -include OPENAMP/subdir.mk
 -include Middlewares/Third_Party/OpenAMP/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/subdir.mk
 -include Drivers/STM32MP1xx_HAL_Driver/subdir.mk
--include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include Common/System/subdir.mk
 -include objects.mk
@@ -65,8 +63,8 @@ all: main-build
 main-build: Dianteira_mpu_CM4.elf secondary-outputs
 
 # Tool invocations
-Dianteira_mpu_CM4.elf Dianteira_mpu_CM4.map: $(OBJS) $(USER_OBJS) /home/lorolol/Baja/firmware/Dianteira_mpu/CM4/STM32MP157FACX_RAM.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Dianteira_mpu_CM4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/lorolol/Baja/firmware/Dianteira_mpu/CM4/STM32MP157FACX_RAM.ld" --specs=nosys.specs -Wl,-Map="Dianteira_mpu_CM4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Dianteira_mpu_CM4.elf Dianteira_mpu_CM4.map: $(OBJS) $(USER_OBJS) /home/pauli/baja/firmware/Dianteira_mpu/CM4/STM32MP157FACX_RAM.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Dianteira_mpu_CM4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/pauli/baja/firmware/Dianteira_mpu/CM4/STM32MP157FACX_RAM.ld" --specs=nosys.specs -Wl,-Map="Dianteira_mpu_CM4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

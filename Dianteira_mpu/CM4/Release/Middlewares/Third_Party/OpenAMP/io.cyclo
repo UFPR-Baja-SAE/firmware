@@ -1,4 +1,0 @@
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:12:6:metal_io_init	3
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:35:5:metal_io_block_read	10
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:72:5:metal_io_block_write	10
-/home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:109:5:metal_io_block_set	9

@@ -1,5 +1,5 @@
 Middlewares/Third_Party/FreeRTOS/list.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/list.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/list.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \

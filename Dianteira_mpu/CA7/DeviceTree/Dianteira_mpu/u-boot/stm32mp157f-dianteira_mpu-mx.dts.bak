@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
 /*
- * Copyright (C) 2024, STMicroelectronics - All Rights Reserved
+ * Copyright (C) 2025, STMicroelectronics - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -286,6 +286,12 @@
 		pins {
 			pinmux = <STM32_PINMUX('A', 11, RSVD)>, /* I2C5_SCL */
 					 <STM32_PINMUX('A', 12, RSVD)>; /* I2C5_SDA */
+		};
+	};
+
+	m4_tim5_pins_mx: m4_tim5_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('H', 11, RSVD)>; /* TIM5_CH2 */
 		};
 	};
 
@@ -1109,6 +1115,22 @@
 
 	/* USER CODE BEGIN m4_m_can2 */
 	/* USER CODE END m4_m_can2 */
+};
+
+&m4_timers2{
+	status = "okay";
+
+	/* USER CODE BEGIN m4_timers2 */
+	/* USER CODE END m4_timers2 */
+};
+
+&m4_timers5{
+	pinctrl-names = "default";
+	pinctrl-0 = <&m4_tim5_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN m4_timers5 */
+	/* USER CODE END m4_timers5 */
 };
 
 &m4_uart7{

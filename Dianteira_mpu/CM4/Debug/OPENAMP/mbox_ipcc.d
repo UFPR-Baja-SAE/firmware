@@ -71,7 +71,9 @@ OPENAMP/mbox_ipcc.o: ../OPENAMP/mbox_ipcc.c \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_tim_ex.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart.h \
  ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h \
- ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h
+ ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h \
+ ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
+ ../OPENAMP/openamp.h
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/open_amp.h:
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h:
 ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/compiler.h:
@@ -146,3 +148,5 @@ OPENAMP/mbox_ipcc.o: ../OPENAMP/mbox_ipcc.c \
 ../../Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal_uart_ex.h:
 ../OPENAMP/openamp_conf.h:
 ../OPENAMP/mbox_ipcc.h:
+../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
+../OPENAMP/openamp.h:

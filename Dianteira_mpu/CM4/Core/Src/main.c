@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -30,9 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "virt_uart.h"
 
-#include "signals.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,10 +51,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern osThreadId_t RxCommsHandle;
-VIRT_UART_HandleTypeDef vuart;
 
-uint8_t vuarx;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,14 +59,7 @@ void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
-void VIRT_UART0_RxCpltCallback(VIRT_UART_HandleTypeDef *huart) {
-	 vuarx= 1;
-}
 
-void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) {
-	osThreadFlagsSet(RxCommsHandle, SIGNAL_CAN_RX);
-	HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, NULL);
-}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -119,14 +107,7 @@ int main(void)
   }
 
   /* USER CODE BEGIN SysInit */
-  VIRT_UART_RegisterCallback(&vuart, VIRT_UART_RXCPLT_CB_ID, VIRT_UART0_RxCpltCallback);
-  VIRT_UART_Init(&vuart);
 
-  while (vuarx != 1) {
-  	OPENAMP_check_for_message();
-  }
-
-  VIRT_UART_Transmit(&vuart, "started", 7);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */

@@ -1,0 +1,7 @@
+../Core/Src/comms.c:18:10:comms_get_can_msg	2
+../Core/Src/comms.c:29:14:comms_put_can_msg	2
+../Core/Src/comms.c:37:14:comms_can_rx_cb	1
+../Core/Src/comms.c:44:5:comms_format_msg	1
+../Core/Src/comms.c:58:6:rpmsg_cb	1
+../Core/Src/comms.c:64:14:comms_start_rpmsg	6
+../Core/Src/comms.c:77:14:comms_send_rpmsg	2

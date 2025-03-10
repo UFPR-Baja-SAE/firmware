@@ -1,5 +1,0 @@
-../Core/Src/LoRa_E22.c:6:19:lora_setmode	32	static
-../Core/Src/LoRa_E22.c:61:19:lora_write_register	64	dynamic
-../Core/Src/LoRa_E22.c:90:19:lora_init	32	static
-../Core/Src/LoRa_E22.c:126:19:lora_write_message	24	static
-../Core/Src/LoRa_E22.c:139:19:lora_read_message	24	static

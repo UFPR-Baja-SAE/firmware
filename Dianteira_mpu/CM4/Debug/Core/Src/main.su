@@ -1,16 +1,5 @@
-<<<<<<< HEAD
-../Core/Src/main.c:67:6:VIRT_UART0_RxCpltCallback	16	static
-../Core/Src/main.c:71:6:HAL_FDCAN_RxFifo0Callback	16	static
-../Core/Src/main.c:86:5:main	8	static
-../Core/Src/main.c:170:6:SystemClock_Config	336	static
-../Core/Src/main.c:255:6:PeriphCommonClock_Config	352	static
-../Core/Src/main.c:281:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:298:6:Error_Handler	4	static,ignoring_inline_asm
-=======
-../Core/Src/main.c:64:6:HAL_FDCAN_RxFifo0Callback	16	static
-../Core/Src/main.c:78:5:main	8	static
-../Core/Src/main.c:154:6:SystemClock_Config	336	static
-../Core/Src/main.c:239:6:PeriphCommonClock_Config	352	static
-../Core/Src/main.c:265:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:282:6:Error_Handler	4	static,ignoring_inline_asm
->>>>>>> aa042026bf828a4b8e70cc3af20d1cf7d230f852
+../Core/Src/main.c:74:5:main	8	static
+../Core/Src/main.c:151:6:SystemClock_Config	336	static
+../Core/Src/main.c:236:6:PeriphCommonClock_Config	352	static
+../Core/Src/main.c:262:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:279:6:Error_Handler	4	static,ignoring_inline_asm

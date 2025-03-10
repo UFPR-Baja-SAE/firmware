@@ -41,7 +41,9 @@ OPENAMP/rsc_table.o: ../OPENAMP/rsc_table.c ../OPENAMP/rsc_table.h \
  ../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/spinlock.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
- ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h
+ ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h \
+ ../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
+ ../OPENAMP/openamp.h
 ../OPENAMP/rsc_table.h:
 ../OPENAMP/openamp.h:
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/open_amp.h:
@@ -87,3 +89,5 @@ OPENAMP/rsc_table.o: ../OPENAMP/rsc_table.c ../OPENAMP/rsc_table.h \
 ../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h:
 ../OPENAMP/openamp_conf.h:
 ../OPENAMP/mbox_ipcc.h:
+../../Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
+../OPENAMP/openamp.h:

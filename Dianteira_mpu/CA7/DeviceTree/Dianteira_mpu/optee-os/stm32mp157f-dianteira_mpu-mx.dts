@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
 /*
- * Copyright (C) 2024, STMicroelectronics - All Rights Reserved
+ * Copyright (C) 2025, STMicroelectronics - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -148,15 +148,6 @@
 
 /*Warning: the configuration of the secured GPIOs should be added in (addons) User Section*/
 &pinctrl {
-	rcc_pins_mx: rcc_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('C', 14, ANALOG)>, /* RCC_OSC32_IN */
-					 <STM32_PINMUX('C', 15, ANALOG)>, /* RCC_OSC32_OUT */
-					 <STM32_PINMUX('H', 0, ANALOG)>, /* RCC_OSC_IN */
-					 <STM32_PINMUX('H', 1, ANALOG)>; /* RCC_OSC_OUT */
-		};
-	};
-
 	rtc_pins_mx: rtc_mx-0 {
 		pins {
 			pinmux = <STM32_PINMUX('I', 8, ANALOG)>; /* RTC_LSCO */
@@ -545,8 +536,6 @@
 };
 
 &rcc{
-	pinctrl-names = "default";
-	pinctrl-0 = <&rcc_pins_mx>;
 	status = "okay";
 
 	/* USER CODE BEGIN rcc */

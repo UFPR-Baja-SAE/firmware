@@ -1,5 +1,5 @@
 Middlewares/Third_Party/FreeRTOS/heap_4.o: \
- /home/lorolol/Baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
+ /home/pauli/baja/firmware/Dianteira_mpu/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
